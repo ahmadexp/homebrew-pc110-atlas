@@ -4,8 +4,8 @@ The packaging targets are Snap Store (Ubuntu App Center), APT, YUM/DNF,
 Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
 installers, tested Snap and Chocolatey packages, and an experimental IRIX source
-kit. The signed APT and YUM/DNF repositories are live. Snap Store and Chocolatey
-Community submission and the notarized Homebrew release are still pending.
+kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
+Chocolatey Community submission and the notarized Homebrew release are still pending.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
 macOS. The Homebrew edition is separate from the SwiftUI Mac Catalyst app and
@@ -100,13 +100,20 @@ and the [GNOME extension](https://ubuntu.com/docs/snapcraft/9/reference/extensio
 
 1. Sign in to Snapcraft with the publishing Ubuntu One account. The name
    `pc110-atlas` is registered to `ahmadexp` and the publishing agreement has
-   been accepted. The Ubuntu One profile must have a username for the listing
-   editor to work.
-2. Complete the store listing using [the prepared listing](../snap/STORE_LISTING.md).
+   been accepted. The listing editor becomes available after the first revision
+   is uploaded.
+2. Maintain the store listing using [the published listing record](../snap/STORE_LISTING.md).
+   The initial listing includes its icon and all four Ubuntu screenshots.
 3. Export a credential restricted to this snap and the channels you intend to
    publish: `snapcraft export-login --snaps=pc110-atlas snap-login.txt`.
    Store its contents as the repository secret `SNAPCRAFT_STORE_CREDENTIALS`.
-   Keep that file outside this repository.
+   Keep that file outside this repository. The configured credential is restricted
+   to `pc110-atlas`, package access/upload/release, and the four standard channels;
+   it expires September 14, 2027. It uses Candid authentication, so the publishing
+   repository variable `SNAPCRAFT_STORE_AUTH` is set to `candid`. The workflow
+   passes credentials through environment variables instead of the removed
+   `snapcraft login --with` mechanism. If rotating to Ubuntu One credentials,
+   clear the Candid variable at the same time.
 4. Run the publish workflow with Snap selected and channel `edge`. After the
    store accepts the upload, test installation and promote to `stable`.
 

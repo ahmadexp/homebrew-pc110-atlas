@@ -16,7 +16,7 @@ available files and their release notes.
 
 | Channel | Target | Status |
 | --- | --- | --- |
-| Snap Store | Ubuntu amd64 / arm64 | Name registered; packages tested; store submission pending |
+| Snap Store | Ubuntu amd64 / arm64 | [Published to stable](https://snapcraft.io/pc110-atlas) |
 | APT | Ubuntu/Debian amd64 / arm64 | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
 | YUM/DNF | Compatible x86_64 / aarch64 Linux | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
 | Chocolatey | Windows x64 | Tested NUPKG available; Community submission awaits publishing API key |
@@ -25,7 +25,7 @@ available files and their release notes.
 
 ## Install
 
-Ubuntu Snap Store, once available:
+Ubuntu Snap Store:
 
 ```sh
 sudo snap install pc110-atlas

@@ -25,7 +25,9 @@ are deployed and have passed checks against their public HTTPS URLs.
 | Portable core synthetic BIOS boot on emulated big-endian MIPS Linux | Passed |
 | IRIX source test kit public download and checksum verification | Passed |
 | Actual IRIX 6.5 / SGI workstation execution | Pending hardware testing; no precompiled IRIX executable is claimed |
-| Snap Store listing and submission | Name registered and agreement accepted; listing and upload pending |
+| Snap Store uploads and stable release, amd64 revision 1 and arm64 revision 2 | [Published](https://snapcraft.io/pc110-atlas), [upload workflow passed](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34867075816) |
+| Store download on Ubuntu arm64, edge launch, stable refresh and launch | Passed with strict confinement |
+| Public listing title, description, category, license, links, icon and four Ubuntu screenshots | Saved and visually verified |
 | Chocolatey Community submission | Pending publishing API key |
 
 The portable desktop edition bundles Eclipse Temurin 21.0.12.1+1-LTS. Its
