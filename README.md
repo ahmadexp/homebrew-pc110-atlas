@@ -7,21 +7,36 @@ and raw disk images. IBM firmware and operating-system media are not included.
 This repository hosts public releases, the Homebrew tap, package publishing
 workflows, store assets, and the experimental IRIX source edition.
 
-## Availability
+## Platform compatibility
 
-Linux and Windows installers, signed APT and YUM/DNF repositories, tested
-Snap and Chocolatey packages, and the experimental IRIX source kit are available. Check
-[Releases](https://github.com/ahmadexp/homebrew-pc110-atlas/releases) for the
-available files and their release notes.
+PC110 Atlas brings the PC110 hardware reference and emulator to modern devices.
+Availability checked September 14, 2026.
 
-| Channel | Target | Status |
-| --- | --- | --- |
-| Snap Store | Ubuntu amd64 / arm64 | [Published to stable](https://snapcraft.io/pc110-atlas) |
-| APT | Ubuntu/Debian amd64 / arm64 | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
-| YUM/DNF | Compatible x86_64 / aarch64 Linux | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
-| Chocolatey | Windows x64 | [Submitted](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34869323670); automated review and moderator approval pending |
-| Homebrew | macOS Intel / Apple silicon | Notarized release pending |
-| IRIX | IRIX 6.5 MIPS n32 source | [Test kit available](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0), hardware testing pending |
+| Platform / channel | Compatibility | Download or installation | Availability |
+| --- | --- | --- | --- |
+| iPhone and iPad | iOS / iPadOS 17 or later | [App Store](https://apps.apple.com/us/app/pc-110/id6801404183) | Available |
+| Mac App Store edition | macOS 14 or later, Apple M1 or later | [Mac App Store](https://apps.apple.com/us/app/pc-110/id6801404183) | Available |
+| Apple Watch | watchOS 10 or later, paired iPhone | [App Store companion](https://apps.apple.com/us/app/pc-110/id6801404183) | Available; remote display and controls for the iPhone session |
+| Apple Vision Pro | visionOS 2 or later | [App Store compatibility](https://apps.apple.com/us/app/pc-110/id6801404183) | Listed as compatible; see the store for the offered edition |
+| Apple TV | tvOS 17 or later | No public download yet | Reference edition prepared; not listed in the current App Store release |
+| Android | Android 8.0 or later, arm64 | [Google Play internal test](https://play.google.com/apps/internaltest/4701134158978166940) | Testing; invitation required |
+| Ubuntu / Snap Store | amd64 and arm64 | [Snap Store](https://snapcraft.io/pc110-atlas) | Available on stable; `sudo snap install pc110-atlas` |
+| Linux / APT | amd64 and arm64; tested on Ubuntu 24.04 | [Signed APT repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; DEB packages |
+| Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
+| Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
+| Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Tested package available; Community submission awaits review |
+| Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Homebrew tap and release status](https://github.com/ahmadexp/homebrew-pc110-atlas) | Developer ID signed candidates; DMGs and cask await notarization |
+| IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
+
+The Mac App Store and Homebrew packages are separate editions. Native Linux
+packages require a distribution that satisfies their dependencies. The smaller
+Unix edition requires a C99 compiler, GNU make, and X11 development libraries;
+its frontend has been tested on Linux X11, but other Unix systems are unverified.
+
+[All desktop downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0)
+include the portable desktop release, while the
+[distribution validation record](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/desktop/DISTRIBUTION_VALIDATION.md)
+details what has been tested.
 
 ## Install
 
