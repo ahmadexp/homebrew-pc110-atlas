@@ -132,8 +132,10 @@ jobs:
           test "${#files[@]}" = 1
           echo "snap=${files[0]}" >> "$GITHUB_OUTPUT"
       - uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+          SNAPCRAFT_STORE_AUTH: ${{ vars.SNAPCRAFT_STORE_AUTH }}
         with:
-          store_login: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
           snap: ${{ steps.file.outputs.snap }}
           release: ${{ inputs.snap_channel }}
 
