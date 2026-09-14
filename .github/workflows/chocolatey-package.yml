@@ -1,0 +1,65 @@
+name: Prepare and test Chocolatey package
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Public desktop release version
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop-package-publishing
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download verified MSI and render package
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ($env:VERSION -notmatch '^[1-9][0-9]*\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$') { throw 'Invalid desktop version' }
+          gh release download "desktop-v$env:VERSION" --pattern '*-windows-x64.msi' --pattern SHA256SUMS --dir desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python desktop/packaging/verify-downloads.py desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python desktop/packaging/prepare-release.py manifests --channel chocolatey --version $env:VERSION --repository $env:REPOSITORY --assets desktop/build/release --output desktop/build/manifests
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          choco pack desktop/build/manifests/chocolatey/pc110-atlas.nuspec --outputdirectory desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Test installation and uninstall through Chocolatey
+        shell: pwsh
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          choco install pc110-atlas --source "$PWD/desktop/build/release" --version $env:VERSION --no-progress -y
+          if ($LASTEXITCODE -notin @(0, 1641, 3010)) { throw "Chocolatey install failed: $LASTEXITCODE" }
+          $check = Start-Process "$env:ProgramFiles\PC110 Atlas\PC110 Atlas.exe" -ArgumentList '--smoke-test' -Wait -PassThru
+          if ($check.ExitCode -ne 0) { throw 'Installed launcher smoke test failed' }
+          choco uninstall pc110-atlas --no-progress -y
+          if ($LASTEXITCODE -notin @(0, 1605, 1614, 1641, 3010)) { throw "Chocolatey uninstall failed: $LASTEXITCODE" }
+      - name: Attach tested package to the release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          $package = Get-Item "desktop/build/release/pc110-atlas.$env:VERSION.nupkg"
+          gh release upload "desktop-v$env:VERSION" $package.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $hash = (Get-FileHash $package.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          Add-Content -Path desktop/build/release/SHA256SUMS -Value "$hash  $($package.Name)" -Encoding utf8
+          gh release upload "desktop-v$env:VERSION" desktop/build/release/SHA256SUMS --clobber
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

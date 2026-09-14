@@ -50,6 +50,18 @@ class ReleaseTests(unittest.TestCase):
             release.manifests(self.assets, self.root / 'output', '1.2.3', 'owner/project')
         self.assertFalse((self.root / 'output').exists())
 
+    def test_chocolatey_can_release_without_macos_artifacts(self):
+        (self.assets / 'pc110-atlas-1.2.3-windows-x64.msi').write_bytes(b'msi')
+        output = self.root / 'manifests'
+        release.manifests(self.assets, output, '1.2.3', 'owner/public-releases', 'chocolatey')
+        install = (output / 'chocolatey/tools/chocolateyInstall.ps1').read_text()
+        self.assertIn('https://github.com/owner/public-releases/releases/download/', install)
+        self.assertFalse((output / 'homebrew').exists())
+        package = ET.parse(output / 'chocolatey/pc110-atlas.nuspec')
+        ns = {'n': 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'}
+        self.assertEqual(package.find('.//n:licenseUrl', ns).text,
+                         'https://github.com/owner/public-releases/blob/main/LICENSING.md')
+
     def test_detects_tampered_or_unlisted_release_file(self):
         self.artifacts()
         release.checksums(self.assets)
