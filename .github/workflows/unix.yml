@@ -1,0 +1,40 @@
+name: Unix and MIPS portability
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    paths: ["unix/**", "PC110Atlas/Vendor/PC110Core/**", ".github/workflows/unix.yml"]
+  push:
+    paths: ["unix/**", "PC110Atlas/Vendor/PC110Core/**", ".github/workflows/unix.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  x11:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install X11 build tools
+        run: sudo apt-get update && sudo apt-get install -y build-essential libx11-dev xvfb
+      - name: Build and test
+        run: |
+          make -C unix all check
+          xvfb-run -a -s '-screen 0 640x560x24' unix/build/pc110-atlas-unix --smoke-test
+          xvfb-run -a -s '-screen 0 640x560x16' unix/build/pc110-atlas-unix --smoke-test
+          xvfb-run -a -s '-screen 0 640x560x8' unix/build/pc110-atlas-unix --smoke-test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unix-x11-linux-x64
+          path: unix/build/pc110-atlas-unix
+  mips:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install MIPS cross compiler and emulator
+        run: sudo apt-get update && sudo apt-get install -y gcc-mips-linux-gnu qemu-user
+      - name: Boot test ROM on big-endian MIPS
+        run: |
+          make -C unix build/test-portable CC=mips-linux-gnu-gcc LDFLAGS=-static
+          qemu-mips unix/build/test-portable

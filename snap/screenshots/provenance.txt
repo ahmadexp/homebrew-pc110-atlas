@@ -1,0 +1,2 @@
+Rendered from the packaged PC110 Atlas Compose UI on Linux.
+Viewport: 1600 x 1000. Empty isolated media repository. No imported guest images.

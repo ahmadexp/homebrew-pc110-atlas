@@ -1,0 +1,46 @@
+PC110 Atlas IRIX test report
+===========================
+
+Test date:
+Archive filename:
+SGI model:
+CPU type / speed:
+Installed RAM:
+IRIX version (uname -a, hostname may be removed):
+Graphics adapter / X display depth:
+Local SGI display or remote X server:
+GCC version:
+GNU make version:
+Build overrides or environment changes:
+Output of: file unix/build/pc110-atlas-unix
+
+Mark each item PASS, FAIL, or NOT TESTED:
+
+Build completes with exit status 0:
+Core test completes with expected success message:
+X11 smoke test shows red/green/blue and exits successfully:
+Normal application opens and text is readable:
+Discover / Emulator / Hardware / Archive / Help tabs work:
+Window close and Ctrl+Shift+Q work:
+
+Optional guest tests (only with your own media):
+BIOS boots:
+Disk boots (OS name/version only):
+Guest keyboard input:
+Guest mouse input:
+Ctrl+Shift+P pause/resume:
+Ctrl+Shift+R reset:
+Responsiveness and any --fps / --instructions settings:
+
+Errors, unexpected behavior, or visual problems:
+
+Attachments available:
+[ ] build.log
+[ ] core-test.log
+[ ] x11-test.log
+[ ] application.log
+[ ] uname / hinv / compiler / make / file output
+[ ] Screenshot (optional)
+
+Please return this report even if the build fails. Include exact error
+messages and toolchain paths. Do not attach BIOS files or disk images.

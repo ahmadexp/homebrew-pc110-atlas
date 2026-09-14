@@ -1,0 +1,14 @@
+$ErrorActionPreference = 'Stop'
+if (-not [Environment]::Is64BitOperatingSystem -or $env:ChocolateyForceX86 -eq 'true') {
+    throw 'PC110 Atlas requires 64-bit Windows.'
+}
+$packageArgs = @{
+    packageName   = 'pc110-atlas'
+    fileType      = 'msi'
+    url64bit      = 'https://github.com/@REPOSITORY@/releases/download/desktop-v@VERSION@/pc110-atlas-@VERSION@-windows-x64.msi'
+    checksum64    = '@WINDOWS_SHA256@'
+    checksumType64 = 'sha256'
+    silentArgs    = '/qn /norestart'
+    validExitCodes = @(0, 1641, 3010)
+}
+Install-ChocolateyPackage @packageArgs

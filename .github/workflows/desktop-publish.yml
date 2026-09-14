@@ -1,0 +1,179 @@
+name: Publish desktop package channels
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published desktop version, such as 1.0.0
+        type: string
+        required: true
+      linux_repositories:
+        description: Publish signed APT and YUM/DNF repositories to GitHub Pages
+        type: boolean
+        default: false
+      snap_store:
+        description: Upload snaps to Snap Store
+        type: boolean
+        default: false
+      snap_channel:
+        description: Snap Store channel
+        type: choice
+        options: [edge, beta, candidate, stable]
+        default: edge
+      chocolatey:
+        description: Submit to Chocolatey Community Repository
+        type: boolean
+        default: false
+      homebrew:
+        description: Update the configured Homebrew tap
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-package-publishing
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          [[ "$VERSION" =~ ^[1-9][0-9]*\.[0-9]+\.[0-9]+$ ]]
+          test "$(gh release view "desktop-v$VERSION" --repo "$REPOSITORY" --json isDraft --jq .isDraft)" = false
+
+  linux:
+    if: inputs.linux_repositories
+    needs: validate
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install repository tools
+        run: sudo apt-get update && sudo apt-get install -y apt-utils rpm createrepo-c gnupg
+      - name: Download release packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: gh release download "desktop-v$VERSION" --pattern '*.deb' --pattern '*.rpm' --pattern SHA256SUMS --dir desktop/build/release
+      - name: Verify downloads
+        run: python3 desktop/packaging/verify-downloads.py desktop/build/release
+      - uses: actions/configure-pages@v5
+        id: pages
+      - name: Import signing key and generate repositories
+        env:
+          LINUX_GPG_PRIVATE_KEY: ${{ secrets.LINUX_GPG_PRIVATE_KEY }}
+          LINUX_GPG_KEY_ID: ${{ vars.LINUX_GPG_KEY_ID }}
+          REPOSITORY_URL: ${{ steps.pages.outputs.base_url }}
+          GNUPGHOME: ${{ runner.temp }}/pc110-gnupg
+        run: |
+          mkdir -m 700 "$GNUPGHOME"
+          printf '%s' "$LINUX_GPG_PRIVATE_KEY" | gpg --batch --import
+          python3 desktop/packaging/build-repositories.py --assets desktop/build/release --output desktop/build/repository --base-url "$REPOSITORY_URL"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: desktop/build/repository
+      - uses: actions/deploy-pages@v4
+        id: deployment
+
+  snap:
+    if: inputs.snap_store
+    needs: validate
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download snap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          ARCH: ${{ matrix.arch }}
+        run: gh release download "desktop-v$VERSION" --pattern "*_$ARCH.snap" --pattern SHA256SUMS --dir desktop/build/release
+      - name: Verify download and locate snap
+        id: file
+        run: |
+          python3 desktop/packaging/verify-downloads.py desktop/build/release
+          files=(desktop/build/release/*.snap)
+          test "${#files[@]}" = 1
+          echo "snap=${files[0]}" >> "$GITHUB_OUTPUT"
+      - uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+          snap: ${{ steps.file.outputs.snap }}
+          release: ${{ inputs.snap_channel }}
+
+  chocolatey:
+    if: inputs.chocolatey
+    needs: validate
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download and submit package
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
+        run: |
+          gh release download "desktop-v$env:VERSION" --pattern '*.nupkg' --pattern SHA256SUMS --dir desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python desktop/packaging/verify-downloads.py desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (-not $env:CHOCO_API_KEY) { throw 'Set CHOCO_API_KEY' }
+          $package = (Get-ChildItem desktop/build/release/*.nupkg).FullName
+          choco push $package --source https://push.chocolatey.org/ --api-key $env:CHOCO_API_KEY
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+  homebrew:
+    if: inputs.homebrew
+    needs: validate
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download cask and validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh release download "desktop-v$VERSION" --pattern pc110-atlas.rb --pattern SHA256SUMS --dir desktop/build/release
+          python3 desktop/packaging/verify-downloads.py desktop/build/release
+          ruby -c desktop/build/release/pc110-atlas.rb
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.HOMEBREW_TAP_REPOSITORY || github.repository }}
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN || github.token }}
+          path: desktop/build/tap
+      - name: Update tap
+        env:
+          VERSION: ${{ inputs.version }}
+          TAP_REPOSITORY: ${{ vars.HOMEBREW_TAP_REPOSITORY || github.repository }}
+        run: |
+          : "${TAP_REPOSITORY:?Set HOMEBREW_TAP_REPOSITORY to OWNER/homebrew-tap}"
+          mkdir -p desktop/build/tap/Casks
+          cp desktop/build/release/pc110-atlas.rb desktop/build/tap/Casks/
+          cd desktop/build/tap
+          git add Casks/pc110-atlas.rb
+          if ! git diff --cached --quiet; then
+            git -c user.name='PC110 Atlas Releases' -c user.email='ahmadexp@users.noreply.github.com' commit -m "Update pc110-atlas to $VERSION"
+            git push
+          fi

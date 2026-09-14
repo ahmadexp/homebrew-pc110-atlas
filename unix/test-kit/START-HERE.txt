@@ -1,0 +1,111 @@
+PC110 Atlas: IRIX testing kit
+============================
+
+Target: SGI workstation running IRIX 6.5, MIPS III, n32 ABI.
+
+This archive contains source code to build on the SGI. It does not contain
+a precompiled IRIX executable or an inst/tardist installer. Actual IRIX
+hardware compatibility is the purpose of this test and remains unverified.
+The portable core and X11 frontend have passed tests on other platforms.
+
+The lightweight X11 edition has hardware/history pages and an emulator with
+BIOS/disk loading, keyboard/mouse input, and pause/reset controls. It does
+not include the modern desktop interface, 3D viewer, PDF viewer, or audio.
+
+Requirements
+------------
+- IRIX 6.5 development headers and system X11 development libraries.
+- GCC with C99 support and GNU make. The recipe expects SGUG tools at
+  /usr/sgug/bin/gcc and /usr/sgug/bin/make, with their environment configured.
+  Toolchain information: https://github.com/sgidevnet/sgug-rse
+- An X session for the graphical tests. Run from a terminal on the SGI's
+  desktop so DISPLAY is already configured.
+- At least 128 MB of available memory, plus any disk image loaded in memory.
+- gzip and tar to extract this kit. Python and Java are not required.
+
+No administrator privileges or system installation are needed for testing.
+
+1. Extract
+----------
+In the directory where you saved the attachment, run (replace ARCHIVE with
+the attachment's full filename):
+
+  gzip -dc ARCHIVE.tar.gz | tar xf -
+
+Enter the extracted pc110-atlas-VERSION-irix-test-kit directory, then:
+
+  cd unix
+
+All commands below are run from this unix directory. If your interactive
+shell is csh/tcsh, start a Bourne shell first so the log redirections work:
+
+  /bin/sh
+
+2. Build and test the emulator core
+----------------------------------
+Run each command separately. Stop and report the log if a command fails.
+
+  /usr/sgug/bin/make -f irix.mk > build.log 2>&1
+  echo $?
+
+Expected exit status: 0. Other statuses indicate failure; read build.log.
+If your GCC or GNU make is elsewhere, substitute the make command path and
+add CC=/path/to/gcc to BOTH make commands. The default compiler options are
+-std=c99 -mabi=n32 -mips3. The compiler's runtime must also support your CPU.
+
+  /usr/sgug/bin/make -f irix.mk check > core-test.log 2>&1
+  echo $?
+  cat core-test.log
+
+Expected exit status: 0. The log should end with:
+  Portable core boot, little-endian guest memory, and X11 pixel masks passed
+
+This test uses an original synthetic test ROM. No IBM BIOS is needed.
+
+3. Test X11 and the reference pages
+----------------------------------
+  ./build/pc110-atlas-unix --smoke-test > x11-test.log 2>&1
+  echo $?
+  cat x11-test.log
+
+Expected: a brief window with a red/green/blue test image, then automatic
+exit with status 0 and "PC110 Atlas X11 smoke test passed" in the log.
+
+  ./build/pc110-atlas-unix > application.log 2>&1
+
+Click Discover, Emulator, Hardware, Archive, and Help. Confirm text is
+readable and tabs redraw correctly. Without a BIOS, the Emulator tab has no
+guest boot to show. Close the window or press Ctrl+Shift+Q to exit.
+
+4. Optional guest boot test
+--------------------------
+If you have your own compatible BIOS and raw disk image:
+
+  ./build/pc110-atlas-unix --bios /path/to/PC110.rom --disk /path/to/HDD.img
+
+BIOS limit: 1 MB. Disk limit: 512 MB, in whole 512-byte sectors. Prefer a
+small disk on machines with little RAM. Guest writes stay in memory and
+are discarded on exit. Click Emulator for guest keyboard and mouse input.
+Ctrl+Shift+P pauses/resumes; Ctrl+Shift+R resets; Ctrl+Shift+Q quits.
+For slower machines, add: --fps 10 --instructions 10000
+
+5. Return your results
+----------------------
+Fill in ../TEST-REPORT.txt. Include build.log, core-test.log, x11-test.log,
+and application.log when available. Include the output of these commands:
+
+  uname -a
+  hinv
+  /usr/sgug/bin/gcc --version
+  /usr/sgug/bin/make --version
+  file build/pc110-atlas-unix
+
+Note any compiler/runtime path overrides. A screenshot or exact error text
+is useful. Do not attach your BIOS, disk images, or other private media.
+You can redact your hostname from uname output before returning it.
+
+If a runtime library is missing, record its name and the error. Use your
+toolchain's documented environment setup. Do not replace IRIX system libs.
+
+Full frontend documentation is in unix/README.md. Core provenance is in
+PC110Atlas/Vendor/PC110Core/README.md. No firmware or OS media is bundled.

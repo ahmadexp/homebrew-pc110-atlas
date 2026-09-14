@@ -1,0 +1,22 @@
+name: Package repository verification
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  pull_request:
+    paths: ["desktop/packaging/**", ".github/workflows/package-repositories.yml"]
+  push:
+    paths: ["desktop/packaging/**", ".github/workflows/package-repositories.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  repositories:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install repository tools
+        run: sudo apt-get update && sudo apt-get install -y apt-utils rpm createrepo-c gnupg file
+      - name: Verify repository signatures and APT consumption
+        run: python3 desktop/packaging/tests/check-repositories.py

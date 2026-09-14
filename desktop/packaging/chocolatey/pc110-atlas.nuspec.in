@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>pc110-atlas</id>
+    <version>@VERSION@</version>
+    <title>PC110 Atlas</title>
+    <authors>Open-Source-PC110</authors>
+    <owners>ahmadexp</owners>
+    <projectUrl>https://github.com/@REPOSITORY@</projectUrl>
+    <packageSourceUrl>https://github.com/@REPOSITORY@/tree/main/desktop/packaging/chocolatey</packageSourceUrl>
+    <docsUrl>https://github.com/@REPOSITORY@/blob/main/desktop/README.md</docsUrl>
+    <licenseUrl>https://github.com/@REPOSITORY@/blob/main/LICENSING.md</licenseUrl>
+    <bugTrackerUrl>https://github.com/@REPOSITORY@/issues</bugTrackerUrl>
+    <iconUrl>https://raw.githubusercontent.com/@REPOSITORY@/main/desktop/packaging/pc110-atlas.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>Interactive companion and emulator for the IBM Palm Top PC 110</summary>
+    <description>Explore PC110 hardware, schematics, and history. Includes the portable emulator and Java runtime. Import your own legally obtained BIOS and raw disk images. IBM firmware and operating-system media are not included. Requires 64-bit Windows 10 or later.</description>
+    <releaseNotes>https://github.com/@REPOSITORY@/releases/tag/desktop-v@VERSION@</releaseNotes>
+    <tags>pc110 atlas emulator education retrocomputing</tags>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
