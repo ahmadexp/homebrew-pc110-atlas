@@ -2,8 +2,10 @@
 
 The packaging targets are Snap Store (Ubuntu App Center), APT, YUM/DNF,
 Chocolatey, and Homebrew. The workflows prepare real installers and derive
-checksums from their contents. These channels are not live until a maintainer
-configures the accounts below and publishes a desktop release.
+checksums from their contents. Version 1.0.0 has public Linux and Windows
+installers, tested Snap and Chocolatey packages, and an experimental IRIX source
+kit. The signed APT and YUM/DNF repositories are live. Snap Store and Chocolatey
+Community submission and the notarized Homebrew release are still pending.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
 macOS. The Homebrew edition is separate from the SwiftUI Mac Catalyst app and
@@ -28,7 +30,7 @@ project's own repository, rather than Ubuntu's main archive.
 
 ## Build and release
 
-Use a non-Homebrew JDK 21, such as Eclipse Temurin, plus CMake 3.22 or newer.
+Use the Eclipse Temurin version pinned in `packaging/java-version.txt`, plus CMake 3.22 or newer.
 The Compose packaging plugin rejects Homebrew's JDK for macOS packaging.
 The user does not need Java installed because the runtime is bundled.
 
@@ -53,6 +55,7 @@ android\gradlew.bat -p desktop test packageMsi packageExe
 ```
 
 The **Desktop packages** workflow builds five native targets and two snaps.
+Its manual inputs can select a native platform and independently enable Snap builds.
 Ordinary workflow builds produce unsigned macOS packages for testing. Its
 installed-launcher smoke tests load the bundled native core, decode a bundled
 image, and import disposable test media. Run GUI checks before promotion:
@@ -73,11 +76,17 @@ Configure macOS signing secrets before creating a release:
 
 The **Desktop release** workflow is triggered by a `desktop-vVERSION` tag
 matching the version file, for example `desktop-v1.0.0`. It builds and tests the
-packages, signs and notarizes both DMGs, then creates a public GitHub Release
+packages, signs and notarizes both DMGs, then creates a GitHub Release in the workflow's repository
 with the installers, snaps, cask, Chocolatey package, Unix source archive,
 and `SHA256SUMS`. A signing or build failure prevents the release. Do not
 overwrite published installers: release a new version so pinned checksums
 remain valid.
+
+This application's build repository is private. Its release does not become
+public automatically. Transfer validated assets to the public distribution
+repository using the process below. The first public release was assembled
+from successful platform builds, allowing Linux and Windows publication while
+Mac notarization remains pending.
 
 After the release exists, run **Publish desktop package channels**, enter the
 version, and select the channels to publish. Snap defaults to `edge` so the
@@ -128,11 +137,13 @@ The publisher produces a complete static repository with signed APT `InRelease`
 and `Release.gpg`, signed RPM packages, and signed RPM `repomd.xml` metadata.
 The generated `.repo` enables both `gpgcheck` and `repo_gpgcheck`.
 
-Set up a dedicated RSA signing key for this repository, keeping an offline
-backup. Put its ASCII-armored private export in `LINUX_GPG_PRIVATE_KEY` and
+A dedicated RSA signing key is configured for the public distribution repository.
+Its fingerprint is `4B6FA5B0B9C8CC49F0C164C66D199F8D554224BC`. Keep an offline
+backup of the primary key and its revocation certificate. Put its ASCII-armored signing-subkey export in `LINUX_GPG_PRIVATE_KEY` and
 its full public fingerprint in the repository variable `LINUX_GPG_KEY_ID`.
-The unattended workflow expects the exported signing key to be usable without
-an interactive passphrase. Publish the fingerprint alongside your install
+The unattended workflow uses the exported signing subkey without an interactive
+passphrase. The primary certification key stays in the local backup and is not
+provided to GitHub Actions. Publish the fingerprint alongside your install
 instructions so users can verify the key.
 
 Enable GitHub Pages with **GitHub Actions** as the deployment source for this
@@ -158,7 +169,7 @@ versions in the package repository. Minimal headless test containers may need
 `sudo install -d /usr/share/desktop-directories` before installing the GUI
 package, since they do not include a desktop environment.
 
-After publication, use the actual configured Pages URL if it differs:
+The repository is live at the URL below:
 
 ```sh
 # Ubuntu / Debian
@@ -182,8 +193,8 @@ sudo yum install pc110-atlas
 ```
 
 Check the displayed signing-key fingerprint on first installation. No global
-APT trusted-key entry or disabled signature check is needed. For an immediate
-local install before hosting exists, `sudo apt install ./file.deb` or
+APT trusted-key entry or disabled signature check is needed. For a direct
+local install, `sudo apt install ./file.deb` or
 `sudo dnf install ./file.rpm` installs a downloaded native package.
 
 ## Chocolatey
@@ -196,6 +207,10 @@ automatic uninstall. This follows the
 Create a Chocolatey Community account, configure `CHOCO_API_KEY`, and select
 Chocolatey in the publish workflow. Submission enters Chocolatey's review
 process and does not guarantee immediate public availability.
+
+Version 1.0.0's public NUPKG has passed installation, launcher, and uninstall
+checks on Windows using the public MSI download. The Community submission
+still requires the publisher's API key.
 
 Before submission, test the downloaded package from its directory:
 
@@ -262,3 +277,32 @@ The Snap Store requires an Ubuntu One publisher account, snap-name
 registration, and its publishing agreement. The Chocolatey Community
 Repository requires a publisher account and an API key. Put credentials
 in GitHub Actions secrets, never in issue comments, release files, or Git.
+
+## Local macOS signing and notarization
+
+CI candidates can be signed with the existing local Developer ID without
+exporting its private key:
+
+```sh
+export JAVA_HOME=/path/to/temurin-21/Contents/Home
+export MAC_SIGN_ID='Ahmad Byagowi (TWFK4FAG36)'
+bash desktop/packaging/sign-macos-candidate.sh candidate.dmg signed-output.dmg
+NOTARY_KEYCHAIN_PROFILE=your-profile bash desktop/packaging/notarize-macos.sh signed-output.dmg
+```
+
+The signing script uses the same JVM entitlements as Compose, verifies the
+app signature, and signs the DMG. Notarization requires an existing notarytool
+Keychain profile or the Apple account secrets listed above. Regenerate cask
+checksums after notarization and stapling, which change the DMG bytes.
+
+## Runtime source attachments
+
+Both Snap and native installers use Eclipse Temurin 21.0.12.1+1-LTS. Preserve
+its runtime notices and attach the matching sources to every public release:
+
+```sh
+python3 desktop/packaging/download-runtime-sources.py --output desktop/build/release
+```
+
+See [runtime source details](packaging/RUNTIME-SOURCES.md). These attachments
+and the build metadata accompany the installers in the public release.

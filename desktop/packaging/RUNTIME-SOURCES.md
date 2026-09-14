@@ -1,7 +1,7 @@
 # Bundled Java runtime
 
 Desktop 1.0.0 uses Eclipse Temurin 21.0.12.1+1-LTS. The setup-java version
-notation is `21.0.12+101.0`, where `101` encodes patch 1 and build 1.
+notation is `21.0.12+101.0.LTS`, where `101` encodes patch 1 and build 1.
 Snap uses the same pinned Linux JDK and verifies its download checksum.
 
 The public release includes these corresponding source and build inputs:

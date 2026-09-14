@@ -9,19 +9,19 @@ workflows, store assets, and the experimental IRIX source edition.
 
 ## Availability
 
-The first desktop release is being prepared. Installation commands below
-become usable after the corresponding channel has been published. Check
+Linux and Windows installers, signed APT and YUM/DNF repositories, tested
+Snap and Chocolatey packages, and the experimental IRIX source kit are available. Check
 [Releases](https://github.com/ahmadexp/homebrew-pc110-atlas/releases) for the
 available files and their release notes.
 
-| Channel | Target | Initial status |
+| Channel | Target | Status |
 | --- | --- | --- |
-| Snap Store | Ubuntu amd64 / arm64 | Publisher account registration pending |
-| APT | Ubuntu/Debian amd64 / arm64 | Signed repository publication pending |
-| YUM/DNF | Compatible x86_64 / aarch64 Linux | Signed repository publication pending |
-| Chocolatey | Windows x64 | Publisher account configuration pending |
+| Snap Store | Ubuntu amd64 / arm64 | Packages tested; publisher agreement and store submission pending |
+| APT | Ubuntu/Debian amd64 / arm64 | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
+| YUM/DNF | Compatible x86_64 / aarch64 Linux | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
+| Chocolatey | Windows x64 | Tested NUPKG available; Community submission awaits publishing API key |
 | Homebrew | macOS Intel / Apple silicon | Notarized release pending |
-| IRIX | IRIX 6.5 MIPS n32 source | Experimental, hardware testing pending |
+| IRIX | IRIX 6.5 MIPS n32 source | [Test kit available](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0), hardware testing pending |
 
 ## Install
 
@@ -32,13 +32,16 @@ sudo snap install pc110-atlas
 ```
 
 APT and YUM/DNF installation instructions and the signing-key fingerprint
-will be published at [the package repository](https://ahmadexp.github.io/homebrew-pc110-atlas/).
+are available at [the package repository](https://ahmadexp.github.io/homebrew-pc110-atlas/).
 
 Repository signing-key fingerprint:
 `4B6FA5B0B9C8CC49F0C164C66D199F8D554224BC`.
 The [public key](desktop/packaging/keys/pc110-atlas.asc) expires September 13, 2028.
 
-Windows, once the Chocolatey submission is accepted:
+Windows: download the MSI/EXE from Releases, or download the NUPKG and install
+it from its directory with `choco install pc110-atlas --source . --version 1.0.0`.
+The package downloads the public MSI and verifies its checksum. Once the
+Chocolatey Community submission is accepted:
 
 ```powershell
 choco install pc110-atlas
@@ -54,6 +57,9 @@ brew install --cask pc110-atlas
 For IRIX, download the source testing kit from Releases and follow its
 `START-HERE.txt`. It requires GCC with C99 support, GNU make, and the system
 X11 development libraries. There is no precompiled IRIX binary yet.
+
+Matching Java runtime sources and build inputs are attached to each desktop
+release. See [runtime source details](desktop/packaging/RUNTIME-SOURCES.md).
 
 ## Documentation and support
 
