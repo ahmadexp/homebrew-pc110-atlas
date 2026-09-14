@@ -5,7 +5,8 @@ Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
 installers, tested Snap and Chocolatey packages, and an experimental IRIX source
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
-Chocolatey Community submission and the notarized Homebrew release are still pending.
+Chocolatey Community version 1.0.0 has been submitted and awaits review.
+The notarized Homebrew release is still pending.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
 macOS. The Homebrew edition is separate from the SwiftUI Mac Catalyst app and
@@ -220,8 +221,10 @@ Then select Chocolatey in the publish workflow. Submission enters Chocolatey's r
 process and does not guarantee immediate public availability.
 
 Version 1.0.0's public NUPKG has passed installation, launcher, and uninstall
-checks on Windows using the public MSI download. The Community submission
-still requires the publisher's API key.
+checks on Windows using the public MSI download. The publishing key is configured,
+and the [Community submission workflow](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34869323670)
+succeeded on September 14, 2026. The package is pending automated review and
+moderator approval, and remains unlisted until approved.
 
 Before submission, test the downloaded package from its directory:
 

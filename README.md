@@ -19,7 +19,7 @@ available files and their release notes.
 | Snap Store | Ubuntu amd64 / arm64 | [Published to stable](https://snapcraft.io/pc110-atlas) |
 | APT | Ubuntu/Debian amd64 / arm64 | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
 | YUM/DNF | Compatible x86_64 / aarch64 Linux | [Signed repository live](https://ahmadexp.github.io/homebrew-pc110-atlas/) |
-| Chocolatey | Windows x64 | Tested NUPKG available; Community submission awaits publishing API key |
+| Chocolatey | Windows x64 | [Submitted](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34869323670); automated review and moderator approval pending |
 | Homebrew | macOS Intel / Apple silicon | Notarized release pending |
 | IRIX | IRIX 6.5 MIPS n32 source | [Test kit available](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0), hardware testing pending |
 
