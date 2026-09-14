@@ -212,8 +212,11 @@ checks SHA-256, and installs it silently. MSI registration enables Chocolatey's
 automatic uninstall. This follows the
 [Chocolatey MSI packaging guide](https://docs.chocolatey.org/en-us/guides/create/create-msi-package/).
 
-Create a Chocolatey Community account, configure `CHOCO_API_KEY`, and select
-Chocolatey in the publish workflow. Submission enters Chocolatey's review
+Create a Chocolatey Community account and obtain its publishing API key. Run
+`bash desktop/packaging/configure-chocolatey.sh` in an interactive terminal to
+save the key directly to the public repository's `CHOCO_API_KEY` Actions secret.
+The prompt hides the key, and the script does not write a plaintext key file.
+Then select Chocolatey in the publish workflow. Submission enters Chocolatey's review
 process and does not guarantee immediate public availability.
 
 Version 1.0.0's public NUPKG has passed installation, launcher, and uninstall
@@ -287,6 +290,14 @@ Repository requires a publisher account and an API key. Put credentials
 in GitHub Actions secrets, never in issue comments, release files, or Git.
 
 ## Local macOS signing and notarization
+
+For the first notarization login, sign in to [Apple Account](https://account.apple.com/)
+and generate an app-specific password in Sign-In and Security. Run
+`bash desktop/packaging/configure-notarization.sh` in an interactive macOS terminal.
+It asks for the Apple Account email for team `TWFK4FAG36`, then lets Apple's
+`notarytool` prompt privately for the app-specific password. It validates and
+stores the credentials in local Keychain profile `pc110-atlas-publishing`.
+Do not paste this password into chat or commit it to Git.
 
 CI candidates can be signed with the existing local Developer ID without
 exporting its private key:
