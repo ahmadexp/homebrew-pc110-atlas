@@ -98,9 +98,10 @@ The project uses Canonical's strictly confined Snap Store path. See
 [Canonical's publication guide](https://ubuntu.com/docs/snapcraft/9/how-to/publishing/publish-a-snap/)
 and the [GNOME extension](https://ubuntu.com/docs/snapcraft/9/reference/extensions/gnome-extension/).
 
-1. Sign in to Snapcraft with the publishing Ubuntu One account and register
-   `pc110-atlas`. Name availability has not been verified. If it is unavailable,
-   update `snap/snapcraft.yaml`, the launcher desktop entry, workflows, and commands.
+1. Sign in to Snapcraft with the publishing Ubuntu One account. The name
+   `pc110-atlas` is registered to `ahmadexp` and the publishing agreement has
+   been accepted. The Ubuntu One profile must have a username for the listing
+   editor to work.
 2. Complete the store listing using [the prepared listing](../snap/STORE_LISTING.md).
 3. Export a credential restricted to this snap and the channels you intend to
    publish: `snapcraft export-login --snaps=pc110-atlas snap-login.txt`.

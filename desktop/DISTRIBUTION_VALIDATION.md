@@ -25,7 +25,7 @@ are deployed and have passed checks against their public HTTPS URLs.
 | Portable core synthetic BIOS boot on emulated big-endian MIPS Linux | Passed |
 | IRIX source test kit public download and checksum verification | Passed |
 | Actual IRIX 6.5 / SGI workstation execution | Pending hardware testing; no precompiled IRIX executable is claimed |
-| Snap Store listing and submission | Assets prepared; publisher agreement and store submission pending |
+| Snap Store listing and submission | Name registered and agreement accepted; listing and upload pending |
 | Chocolatey Community submission | Pending publishing API key |
 
 The portable desktop edition bundles Eclipse Temurin 21.0.12.1+1-LTS. Its

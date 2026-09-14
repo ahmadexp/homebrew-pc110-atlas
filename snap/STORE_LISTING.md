@@ -1,6 +1,12 @@
-# Snap Store listing draft
+# Snap Store listing
 
-Name: `pc110-atlas` (registration required)
+Name: `pc110-atlas` (registered to `ahmadexp`)
+
+Snap ID: `agfCUkEwmIKQZEpG7BzVAlP7maoZEimj`
+
+Publisher agreement accepted on September 14, 2026. Package upload and listing
+submission are pending. The Ubuntu One account needs a username before the
+listing editor can be accessed.
 
 Title: PC110 Atlas
 
@@ -47,7 +53,7 @@ with the Apple and Android QEMU editions. The project is independent of IBM.
 
 ## Submission assets and checks
 
-- Register the name and confirm the publisher profile and licensing fields.
+- Confirm the registered publisher profile and licensing fields.
 - Upload the icon and the prepared Discover, Hardware, Archive, and Run
   screenshots in the Snapcraft dashboard. Refresh these images after UI changes.
 - Publish to edge and test BIOS import, disk import, keyboard, mouse,
@@ -55,5 +61,5 @@ with the Apple and Android QEMU editions. The project is independent of IBM.
 - Promote to stable after store acceptance and functional validation.
 
 The build, upload, and channel selection are automated in the desktop
-workflows. Publisher registration, listing fields, screenshots, and store
-review still require completion in the publishing account.
+workflows. Listing fields, screenshots, and store review still require completion in
+the publishing account.
