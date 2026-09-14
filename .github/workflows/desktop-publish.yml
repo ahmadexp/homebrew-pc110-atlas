@@ -88,6 +88,26 @@ jobs:
           path: desktop/build/repository
       - uses: actions/deploy-pages@v4
         id: deployment
+      - name: Verify public repository and APT client access
+        env:
+          REPOSITORY_URL: ${{ steps.pages.outputs.base_url }}
+          EXPECTED_KEY: ${{ vars.LINUX_GPG_KEY_ID }}
+        run: |
+          verify="$RUNNER_TEMP/public-repository-check"
+          mkdir -p "$verify/lists/partial"
+          curl --fail --silent --show-error --retry 10 --retry-delay 3 --retry-all-errors "$REPOSITORY_URL/keys/pc110-atlas.asc" -o "$verify/key.asc"
+          fingerprint=$(gpg --show-keys --with-colons "$verify/key.asc" | awk -F: '$1 == "fpr" {print $10; exit}')
+          test "$fingerprint" = "$EXPECTED_KEY"
+          gpg --dearmor --output "$verify/key.gpg" "$verify/key.asc"
+          printf 'deb [signed-by=%s/key.gpg] %s/apt stable main\n' "$verify" "$REPOSITORY_URL" > "$verify/sources.list"
+          options=(-o "Dir::Etc::sourcelist=$verify/sources.list" -o Dir::Etc::sourceparts=- -o "Dir::State::Lists=$verify/lists" -o APT::Sandbox::User=root -o Debug::NoLocking=true)
+          apt-get "${options[@]}" update
+          apt-cache "${options[@]}" policy pc110-atlas
+          for arch in x86_64 aarch64; do
+            curl -fsS "$REPOSITORY_URL/rpm/$arch/repodata/repomd.xml" -o "$verify/$arch.xml"
+            curl -fsS "$REPOSITORY_URL/rpm/$arch/repodata/repomd.xml.asc" -o "$verify/$arch.xml.asc"
+            gpgv --keyring "$verify/key.gpg" "$verify/$arch.xml.asc" "$verify/$arch.xml"
+          done
 
   snap:
     if: inputs.snap_store

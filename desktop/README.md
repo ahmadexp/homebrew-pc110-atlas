@@ -79,6 +79,9 @@ user is never modified.
 - Full screen keeps a close control visible in the top-right corner.
 - Hardware schematics open in the operating system's PDF viewer.
 
-The production QEMU backend used by the iPhone app remains a future desktop
-milestone. The initial desktop release deliberately uses the portable core that
-also serves as the Android fallback.
+The [Windows Store candidate](WINDOWS_QEMU.md) builds a native Windows QEMU
+backend with the shared PC110 device models, display, audio, input, and a live
+open-source boot demo. This backend is bundled by the Windows QEMU/Store
+pipeline. Other desktop packages continue to use the portable core unless
+they explicitly include that runtime. See the [Store release checklist](MICROSOFT_STORE.md)
+for the actual validation and submission status.
