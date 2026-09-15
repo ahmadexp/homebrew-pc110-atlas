@@ -71,6 +71,47 @@ class ReleaseTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             downloads.verify(self.assets)
 
+    def test_chocolatey_icon_uses_release_pinned_cdn(self):
+        self.artifacts()
+        output = self.root / 'manifests'
+        release.manifests(self.assets, output, '1.2.3', 'owner/project', 'chocolatey')
+        package = ET.parse(output / 'chocolatey/pc110-atlas.nuspec')
+        ns = {'n': 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'}
+        self.assertEqual(package.find('.//n:iconUrl', ns).text,
+                         'https://cdn.jsdelivr.net/gh/owner/project@desktop-v1.2.3/desktop/packaging/pc110-atlas.png')
+
+    def test_checksum_update_preserves_undownloaded_assets_and_is_idempotent(self):
+        self.artifacts()
+        release.checksums(self.assets)
+        original = (self.assets / 'SHA256SUMS').read_text()
+        (self.assets / 'pc110-atlas-1.2.3-macos-arm64.dmg').unlink()
+        package = self.assets / 'pc110-atlas.1.2.3.nupkg'
+        package.write_bytes(b'first package')
+        release.checksums(self.assets, package.name)
+        package.write_bytes(b'corrected package')
+        release.checksums(self.assets, package.name)
+        expected = original + f'{release.digest(package)}  {package.name}\n'
+        self.assertEqual((self.assets / 'SHA256SUMS').read_text(), expected)
+        release.checksums(self.assets, package.name)
+        self.assertEqual((self.assets / 'SHA256SUMS').read_text(), expected)
+        downloads.verify(self.assets)
+
+    def test_checksum_update_rejects_invalid_input_without_changing_manifest(self):
+        self.artifacts()
+        release.checksums(self.assets)
+        manifest = self.assets / 'SHA256SUMS'
+        original = manifest.read_text()
+        for name in ('../package.nupkg', '/package.nupkg', 'tools\\package.nupkg',
+                     'SHA256SUMS', 'SHA256SUMS.asc', 'missing.nupkg'):
+            with self.assertRaises(ValueError):
+                release.checksums(self.assets, name)
+            self.assertEqual(manifest.read_text(), original)
+        for invalid in ('malformed\n', original + original):
+            manifest.write_text(invalid)
+            with self.assertRaises(ValueError):
+                release.checksums(self.assets, 'pc110-atlas-1.2.3-windows-x64.msi')
+            self.assertEqual(manifest.read_text(), invalid)
+
     def test_rejects_ambiguous_old_builds(self):
         directory = self.root / 'build/dmg'
         directory.mkdir(parents=True)

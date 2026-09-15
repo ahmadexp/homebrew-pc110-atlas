@@ -77,7 +77,24 @@ def manifests(assets, output, version, repository, channel='all'):
         render(PACKAGING / 'chocolatey/chocolateyInstall.ps1.in', output / 'chocolatey/tools/chocolateyInstall.ps1', values)
 
 
-def checksums(assets):
+def checksums(assets, update_file=None):
+    if update_file is not None:
+        if (not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*', update_file)
+                or update_file in ('SHA256SUMS', 'SHA256SUMS.asc')):
+            raise ValueError('Checksum update requires a release artifact filename')
+        manifest = assets / 'SHA256SUMS'
+        entries = {}
+        for line in manifest.read_text().splitlines():
+            match = re.fullmatch(r'([0-9a-f]{64})  ([^/\\]+)', line)
+            if not match or match[2] in entries:
+                raise ValueError('Malformed or duplicate SHA256SUMS entry')
+            entries[match[2]] = match[1]
+        artifact = assets / update_file
+        if not artifact.is_file() or artifact.stat().st_size == 0:
+            raise ValueError(f'Missing or empty release artifact: {artifact}')
+        entries[update_file] = digest(artifact)
+        manifest.write_text(''.join(f'{checksum}  {name}\n' for name, checksum in entries.items()))
+        return
     files = sorted(p for p in assets.iterdir() if p.is_file() and p.name not in ('SHA256SUMS', 'SHA256SUMS.asc'))
     if not files:
         raise ValueError('No release artifacts to checksum')
@@ -101,6 +118,7 @@ def main():
     render_parser.add_argument('--channel', choices=('all', 'homebrew', 'chocolatey'), default='all')
     checksum_parser = sub.add_parser('checksums')
     checksum_parser.add_argument('--assets', type=Path, required=True)
+    checksum_parser.add_argument('--update-file', help='Update only this artifact, preserving other release checksums')
     args = vars(parser.parse_args())
     command = args.pop('command')
     try:

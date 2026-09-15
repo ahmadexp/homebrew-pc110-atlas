@@ -7,6 +7,10 @@ on:
         description: Public desktop release version
         type: string
         required: true
+      replace_package:
+        description: Replace an unapproved package after a moderation correction
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -23,6 +27,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Test release manifest and checksum helpers
+        run: python -m unittest discover -s desktop/packaging/tests -p test_release.py -v
       - name: Download verified MSI and render package
         shell: pwsh
         env:
@@ -55,11 +61,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ inputs.version }}
+          REPLACE_PACKAGE: ${{ inputs.replace_package }}
         run: |
           $package = Get-Item "desktop/build/release/pc110-atlas.$env:VERSION.nupkg"
-          gh release upload "desktop-v$env:VERSION" $package.FullName
+          python desktop/packaging/prepare-release.py checksums --assets desktop/build/release --update-file $package.Name
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $hash = (Get-FileHash $package.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-          Add-Content -Path desktop/build/release/SHA256SUMS -Value "$hash  $($package.Name)" -Encoding utf8
+          python desktop/packaging/verify-downloads.py desktop/build/release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $uploadOptions = @()
+          if ($env:REPLACE_PACKAGE -eq 'true') { $uploadOptions += '--clobber' }
+          gh release upload "desktop-v$env:VERSION" $package.FullName @uploadOptions
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           gh release upload "desktop-v$env:VERSION" desktop/build/release/SHA256SUMS --clobber
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

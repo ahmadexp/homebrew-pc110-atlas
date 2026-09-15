@@ -11,7 +11,7 @@
     <docsUrl>https://github.com/@REPOSITORY@/blob/main/desktop/README.md</docsUrl>
     <licenseUrl>https://github.com/@REPOSITORY@/blob/main/LICENSING.md</licenseUrl>
     <bugTrackerUrl>https://github.com/@REPOSITORY@/issues</bugTrackerUrl>
-    <iconUrl>https://raw.githubusercontent.com/@REPOSITORY@/main/desktop/packaging/pc110-atlas.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/@REPOSITORY@@desktop-v@VERSION@/desktop/packaging/pc110-atlas.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Interactive companion and emulator for the IBM Palm Top PC 110</summary>
     <description>Explore PC110 hardware, schematics, and history. Includes the portable emulator and Java runtime. Import your own legally obtained BIOS and raw disk images. IBM firmware and operating-system media are not included. Requires 64-bit Windows 10 or later.</description>
