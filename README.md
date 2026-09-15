@@ -25,13 +25,18 @@ Availability checked September 14, 2026.
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
 | Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
 | Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Tested package available; Community submission awaits review |
-| Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Homebrew tap and release status](https://github.com/ahmadexp/homebrew-pc110-atlas) | Developer ID signed candidates; DMGs and cask await notarization |
+| Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-arm64.dmg), or Homebrew below | Available; Developer ID signed and Apple notarized |
 | IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
 
 The Mac App Store and Homebrew packages are separate editions. Native Linux
 packages require a distribution that satisfies their dependencies. The smaller
 Unix edition requires a C99 compiler, GNU make, and X11 development libraries;
 its frontend has been tested on Linux X11, but other Unix systems are unverified.
+
+The Intel Mac and other portable desktop downloads use the portable PC110 core,
+not QEMU, and do not include guest audio. The [Pinokio launcher](https://github.com/ahmadexp/pc110-atlas-pinokio)
+selects the Intel DMG on Intel Macs and the separate Mac App Store edition on
+Apple silicon. Import your own compatible media; guest compatibility varies.
 
 [All desktop downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0)
 include the portable desktop release, while the
@@ -62,12 +67,18 @@ Chocolatey Community submission is accepted:
 choco install pc110-atlas
 ```
 
-macOS, once the signed and notarized DMGs are available:
+macOS 12 or later, Intel or Apple silicon:
 
 ```sh
 brew tap ahmadexp/pc110-atlas
 brew install --cask pc110-atlas
 ```
+
+Alternatively, open the DMG matching your Mac and drag PC110 Atlas to Applications.
+Do not replace a different edition already installed; keep both if needed.
+The portable app has bundle ID `org.opensourcepc110.atlas.desktop`, separate from
+the Mac App Store app. Leave Gatekeeper enabled. Compare the downloaded file's
+`shasum -a 256` with the release's `SHA256SUMS`.
 
 For IRIX, download the source testing kit from Releases and follow its
 `START-HERE.txt`. It requires GCC with C99 support, GNU make, and the system

@@ -9,7 +9,10 @@ are deployed and have passed checks against their public HTTPS URLs.
 | --- | --- |
 | Native macOS arm64 and x64 DMG builds and packaged launcher smoke tests | Passed in native CI |
 | Both macOS candidates signed with Developer ID, signature verification and signed launcher tests | Passed locally, with x64 execution through Rosetta on Apple silicon |
-| Apple notarization and stapling | Pending notarization credentials; Mac downloads and Homebrew cask are not published |
+| Apple notarization and stapling | Both Mac DMGs accepted, tickets stapled and validated; Gatekeeper accepted the notarized Developer ID |
+| Mac minimum OS target | PC110 JNI core rebuilt from matching release sources for macOS 12.0; packaged binaries inspected |
+| Final Mac packaged launcher smoke tests | Passed on Apple silicon, including x64 through Rosetta; actual execution on macOS 12 remains unverified |
+| Pinokio launcher contracts | 24 passed on Intel Mac, Apple silicon, Windows, Linux x64 and Linux ARM64 in [CI](https://github.com/ahmadexp/pc110-atlas-pinokio/actions/runs/34926993475); Intel Mac Pinokio GUI installation remains unverified |
 | Windows x64 MSI/EXE builds, MSI installation and launcher smoke test | Passed in native Windows CI |
 | Chocolatey NUPKG from public MSI: pack, install, launch and uninstall | [Passed](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34864274829) |
 | Linux arm64 and x64 DEB/RPM builds and desktop tests | Passed on native Ubuntu 24.04 runners |
@@ -19,7 +22,7 @@ are deployed and have passed checks against their public HTTPS URLs.
 | Public APT key fingerprint, signed metadata, APT update and package candidate | [Passed after deployment](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34865017831) |
 | Public RPM repository metadata signatures for x86_64 and aarch64 | Passed after deployment |
 | APT metadata, architecture indexes, signed RPM packages and tamper rejection | Passed integration checks with disposable packages and a temporary key |
-| Release manifest and checksum unit tests | 6 passed |
+| Release manifest, checksum and archived native signing unit tests | 11 passed |
 | GitHub Actions workflow validation with actionlint | Passed |
 | Unix frontend build and X11 tests on Linux x86_64 at 8-, 16-, and 24-bit depth | Passed |
 | Portable core synthetic BIOS boot on emulated big-endian MIPS Linux | Passed |
@@ -38,6 +41,7 @@ MIT licensed; hardware material and third-party libraries retain their terms.
 Public package provenance:
 
 - Windows and Mac candidates: source commit `967f2fc146a92d6da3d736f75e3f240b4c82da3e`, build `34862491797`.
+- Final Mac DMGs retain that application's Java code and runtime. Their matching PC110 JNI sources were rebuilt with deployment target 12.0; archived native libraries, app bundles and DMGs were Developer ID signed before notarization. The first attempt exposed unsigned JAR-contained libraries; the final candidates correct those signatures and the minimum OS target. See the release's `BUILD-PROVENANCE.json` for final notarization IDs.
 - Linux packages with the pinned runtime: source commit `83f54c4faa7c124f91df5ab44e0022c11757a66f`, build `34864108656`.
 - Snap packages with the pinned runtime: source commit `4efc1a0eb0e7326ac599b7e10df8ca9830edf167`, successful Snap jobs in build `34863723925`. Linux jobs in that earlier run failed at Java setup and were replaced by the successful Linux build above.
 

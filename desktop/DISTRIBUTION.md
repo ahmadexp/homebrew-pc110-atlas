@@ -3,10 +3,10 @@
 The packaging targets are Snap Store (Ubuntu App Center), APT, YUM/DNF,
 Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
-installers, tested Snap and Chocolatey packages, and an experimental IRIX source
+installers, notarized Mac DMGs for Intel and Apple silicon, tested Snap and Chocolatey packages, and an experimental IRIX source
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
 Chocolatey Community version 1.0.0 has been submitted and awaits review.
-The notarized Homebrew release is still pending.
+The notarized Mac release is available through the project's Homebrew tap.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
 macOS. The Homebrew edition is separate from the SwiftUI Mac Catalyst app and
@@ -87,7 +87,8 @@ This application's build repository is private. Its release does not become
 public automatically. Transfer validated assets to the public distribution
 repository using the process below. The first public release was assembled
 from successful platform builds, allowing Linux and Windows publication while
-Mac notarization remains pending.
+Mac notarization was pending. Mac packages were added after signing nested
+native libraries and rebuilding the PC110 JNI core for macOS 12.0.
 
 After the release exists, run **Publish desktop package channels**, enter the
 version, and select the channels to publish. Snap defaults to `edge` so the
@@ -244,7 +245,7 @@ workflow token. No separate Homebrew account or token is required for this
 configuration. An optional external tap can use `HOMEBREW_TAP_REPOSITORY` and
 `HOMEBREW_TAP_TOKEN` instead.
 
-After the notarized release and tap have been published:
+Install the notarized release from the project's tap:
 
 ```sh
 brew tap ahmadexp/pc110-atlas
@@ -312,8 +313,28 @@ bash desktop/packaging/sign-macos-candidate.sh candidate.dmg signed-output.dmg
 NOTARY_KEYCHAIN_PROFILE=your-profile bash desktop/packaging/notarize-macos.sh signed-output.dmg
 ```
 
-The signing script uses the same JVM entitlements as Compose, verifies the
-app signature, and signs the DMG. Notarization requires an existing notarytool
+The signing script first signs every `.dylib` and `.jnilib` inside packaged
+JARs, including nested PC110 JNI resources and Skiko's other-architecture
+library. It refreshes any matching `.sha256` cache keys, preserves unrelated
+archive contents, and refuses to invalidate existing Java archive signatures.
+It then uses the same JVM entitlements as Compose, verifies the app signature,
+and signs the DMG. Checking only the outer app with `codesign --deep` does not
+validate native code inside JAR archives. Test the final packaged launcher
+again after signing. Regression tests cover archive preservation, checksum
+refresh and failed signing without replacing the original JAR.
+
+The PC110 native CMake target defaults to macOS 12.0 before compiler detection.
+For old candidates built with the build host's newer deployment target, rebuild
+the JNI library from the same source revision with
+`-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0` and the matching
+`-DCMAKE_OSX_ARCHITECTURES=x86_64` or `arm64`. Pass the resulting library to the
+signing script through `PC110_NATIVE_LIBRARY=/absolute/path/libpc110_desktop.dylib`.
+The script checks its architecture against the packaged launcher before
+replacing the single PC110 JNI resource and signing it. Confirm the minimum
+version with `xcrun vtool -show-build`, record the rebuild in release provenance,
+and rerun the package smoke test. Do not relabel a macOS 15 binary as macOS 12.
+
+Notarization requires an existing notarytool
 Keychain profile or the Apple account secrets listed above. Regenerate cask
 checksums after notarization and stapling, which change the DMG bytes.
 

@@ -16,6 +16,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Test release manifests and archived native signing
+        run: |
+          python3 -m unittest discover -s desktop/packaging/tests -p test_release.py -v
+          python3 -m unittest discover -s desktop/packaging/tests -p test_macos_signing.py -v
       - name: Install repository tools
         run: sudo apt-get update && sudo apt-get install -y apt-utils rpm createrepo-c gnupg file
       - name: Verify repository signatures and APT consumption
