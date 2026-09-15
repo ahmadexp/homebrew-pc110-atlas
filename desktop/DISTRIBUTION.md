@@ -5,7 +5,8 @@ Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
 installers, notarized Mac DMGs for Intel and Apple silicon, tested Snap and Chocolatey packages, and an experimental IRIX source
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
-Chocolatey Community version 1.0.0 has been submitted and awaits review.
+Chocolatey Community version 1.0.0 was resubmitted with the requested icon URL
+correction on September 15, 2026 and awaits renewed checks and review.
 The notarized Mac release is available through the project's Homebrew tap.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
@@ -221,11 +222,31 @@ The prompt hides the key, and the script does not write a plaintext key file.
 Then select Chocolatey in the publish workflow. Submission enters Chocolatey's review
 process and does not guarantee immediate public availability.
 
-Version 1.0.0's public NUPKG has passed installation, launcher, and uninstall
-checks on Windows using the public MSI download. The publishing key is configured,
-and the [Community submission workflow](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34869323670)
-succeeded on September 14, 2026. The package is pending automated review and
-moderator approval, and remains unlisted until approved.
+Package icons use jsDelivr, pinned to the matching `desktop-vVERSION` GitHub tag.
+That tag must contain `desktop/packaging/pc110-atlas.png`; do not use a GitHub
+raw URL or a moving branch for the Chocolatey `iconUrl`.
+
+For a moderation correction to an unapproved package, run **Prepare and test
+Chocolatey package** with the same version and `replace_package` enabled.
+It tests installation, launch, and uninstall before replacing only the NUPKG
+and its checksum entry. Other release assets and checksums are preserved.
+Then run **Publish desktop package channels** with only Chocolatey selected,
+and respond in the package page's **Add to Review Comments** box.
+Do not replace a package version that Chocolatey has already approved.
+
+Version 1.0.0's corrected public NUPKG passed installation, launcher, and uninstall
+checks on Windows using the unchanged public MSI download in the
+[September 15 package build](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34980697863).
+The original submission passed Chocolatey's validation, verification, and virus
+scanning. A moderator requested a CDN-hosted icon; the corrected package uses
+jsDelivr pinned to the existing `desktop-v1.0.0` tag. The same version was
+[resubmitted successfully](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34980975480)
+on September 15, 2026, and the maintainer response was posted to the
+[package review](https://community.chocolatey.org/packages/pc110-atlas/1.0.0).
+Its status is **Maintainer responded, waiting for review/Maintainer update**.
+Renewed automated checks and moderator approval are pending; it remains unlisted
+until approved. Chocolatey's package download CDN may retain the old NUPKG for
+30 minutes after resubmission.
 
 Before submission, test the downloaded package from its directory:
 

@@ -93,12 +93,14 @@ def checksums(assets, update_file=None):
         if not artifact.is_file() or artifact.stat().st_size == 0:
             raise ValueError(f'Missing or empty release artifact: {artifact}')
         entries[update_file] = digest(artifact)
-        manifest.write_text(''.join(f'{checksum}  {name}\n' for name, checksum in entries.items()))
+        manifest.write_text(''.join(f'{checksum}  {name}\n' for name, checksum in entries.items()),
+                            encoding='utf-8', newline='\n')
         return
     files = sorted(p for p in assets.iterdir() if p.is_file() and p.name not in ('SHA256SUMS', 'SHA256SUMS.asc'))
     if not files:
         raise ValueError('No release artifacts to checksum')
-    (assets / 'SHA256SUMS').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in files))
+    (assets / 'SHA256SUMS').write_text(''.join(f'{digest(p)}  {p.name}\n' for p in files),
+                                     encoding='utf-8', newline='\n')
 
 
 def main():

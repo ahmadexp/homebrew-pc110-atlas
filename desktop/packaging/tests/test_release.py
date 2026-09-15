@@ -92,6 +92,7 @@ class ReleaseTests(unittest.TestCase):
         release.checksums(self.assets, package.name)
         expected = original + f'{release.digest(package)}  {package.name}\n'
         self.assertEqual((self.assets / 'SHA256SUMS').read_text(), expected)
+        self.assertEqual((self.assets / 'SHA256SUMS').read_bytes(), expected.encode('utf-8'))
         release.checksums(self.assets, package.name)
         self.assertEqual((self.assets / 'SHA256SUMS').read_text(), expected)
         downloads.verify(self.assets)

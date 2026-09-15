@@ -24,7 +24,7 @@ Availability checked September 14, 2026.
 | Linux / APT | amd64 and arm64; tested on Ubuntu 24.04 | [Signed APT repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; DEB packages |
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
 | Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
-| Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Tested package available; Community submission awaits review |
+| Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Corrected 1.0.0 package tested and resubmitted September 15; Community approval pending |
 | Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-arm64.dmg), or Homebrew below | Available; Developer ID signed and Apple notarized |
 | IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
 
@@ -60,8 +60,11 @@ The [public key](desktop/packaging/keys/pc110-atlas.asc) expires September 13, 2
 
 Windows: download the MSI/EXE from Releases, or download the NUPKG and install
 it from its directory with `choco install pc110-atlas --source . --version 1.0.0`.
-The package downloads the public MSI and verifies its checksum. Once the
-Chocolatey Community submission is accepted:
+The package downloads the public MSI and verifies its checksum. Version 1.0.0
+was resubmitted on September 15, 2026 with the moderator's requested CDN icon
+correction. The response is posted in the [package review](https://community.chocolatey.org/packages/pc110-atlas/1.0.0);
+renewed automated checks and approval are pending. Once the Chocolatey Community
+submission is approved:
 
 ```powershell
 choco install pc110-atlas
