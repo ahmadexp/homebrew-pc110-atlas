@@ -53,21 +53,17 @@ for Snap Store, signed APT/YUM repositories, Chocolatey, Homebrew, and release
 signing. The Homebrew edition uses this portable core; the SwiftUI Mac Catalyst
 edition remains a separate application target.
 
-A [Pi-Apps candidate](packaging/pi-apps/README.md) is prepared for 64-bit
-Raspberry Pi OS Trixie. The existing ARM64 release passed installation, native
-launcher, UI rendering, reinstall, and uninstall tests in Debian Trixie and
-Ubuntu Noble containers using the Pi-Apps package helpers. A real 4 GB Pi 5
-test on September 17 passed installation and synthetic guest boot/input with
-a temporary media-picker workaround, but found picker and PCB-layer layout
-failures. [Hardware sign-off](packaging/pi-apps/HARDWARE-TEST.md) and upstream
-submission remain pending for that original 1.0.0 package. A separate
-[Linux QEMU fix candidate](LINUX_QEMU.md) now passes the reproduced Pi 5 issues:
-Swing media import, PCB layout, resizing, offline schematics and original/English
-PersonaWare boot and application interaction. It has not replaced
-the published package or been submitted to Pi-Apps.
-The rebuilt 1.0.1 ARM64 candidate also passes clean-container install, launch,
-graphics export and lifecycle checks on Bookworm, Trixie, Jammy, Noble and
-Resolute. It uses Ubuntu 22.04 as its build baseline. 32-bit ARM is not supported.
+The [Pi-Apps 1.0.1 ARM64 review release](packaging/pi-apps/README.md) includes
+the [Linux QEMU backend](LINUX_QEMU.md), Swing media import, resizable PCB
+layers, Wayland resizing and built-in offline schematics. It resolves the
+reproduced Pi 5 failures of the original 1.0.0 portable package. Original and
+English PersonaWare boot and interaction were tested with private media copies.
+The rebuilt 1.0.1 DEB passes clean-container installation, native/QEMU smoke,
+graphics exports and lifecycle checks on Bookworm, Trixie, Jammy, Noble and
+Resolute, plus packaged smoke on the Pi 5. Ubuntu 22.04 is the build baseline;
+32-bit ARM is unsupported. Existing 1.0.0 release channels remain unchanged.
+See [submission status](packaging/pi-apps/SUBMISSION.md) and the exact
+[hardware evidence and limits](packaging/pi-apps/HARDWARE-TEST.md).
 
 ## Personal media
 

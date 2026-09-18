@@ -1,12 +1,12 @@
 # PC110 Atlas 1.0.1, Pi-Apps submission preparation
 
-Not yet submitted. The older-baseline ARM64 package now passes local tests on
-Bookworm, Trixie, Jammy, Noble and Resolute. Upstream OS-image workflow results
-are still required before submitting the PR.
+The ARM64 review release is published. The older-baseline package passes local
+tests on Bookworm, Trixie, Jammy, Noble and Resolute. GitHub-hosted checks are
+running before submission of the upstream PR.
 
 ## App and release
 
-Release URLs below are prepared destinations, not published downloads yet.
+Release URLs below are public downloads. Existing 1.0.0 channels are unchanged.
 
 PC110 Atlas is an interactive hardware reference, historical archive and PC110
 emulator. Explore PCB layers and offline schematics without firmware, try the
@@ -50,3 +50,9 @@ No external APT repository is added. Java is bundled. Proposed category:
 See [hardware/compatibility report](HARDWARE-TEST.md). Add upstream workflow URLs
 and the resulting PR URL here when available. The all-systems issue-template
 confirmation must never be used to hide untested platforms.
+
+## GitHub-hosted checks
+
+- [ShellCheck](https://github.com/ahmadexp/pi-apps/actions/runs/35289477073): passed.
+- [Public-artifact integration](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35289524731): passed on all five distributions. QEMU boot, graphics, keyboard, PCM transport, reset/restart and read-only media checks passed. Four UI exports, reinstall, repeated uninstall and preservation of both default/custom media directories also passed. The CI-rebuilt import ZIP exactly matches the published ZIP checksum.
+- [Upstream OS-image install/uninstall](https://github.com/ahmadexp/pi-apps/actions/runs/35289526490): running for Bookworm, Trixie, Pi Ubuntu Noble/Resolute and Switchroot Jammy/Noble, all ARM64. Bullseye and 32-bit jobs are intentionally disabled.

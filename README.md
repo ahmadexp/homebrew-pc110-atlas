@@ -22,7 +22,7 @@ Availability checked September 14, 2026.
 | Android | Android 8.0 or later, arm64 | [Google Play internal test](https://play.google.com/apps/internaltest/4701134158978166940) | Testing; invitation required |
 | Ubuntu / Snap Store | amd64 and arm64 | [Snap Store](https://snapcraft.io/pc110-atlas) | Available on stable; `sudo snap install pc110-atlas` |
 | Linux / APT | amd64 and arm64; tested on Ubuntu 24.04 | [Signed APT repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; DEB packages |
-| Raspberry Pi / Pi-Apps | ARM64 candidate for Bookworm/Trixie and Ubuntu Jammy/Noble/Resolute | [Candidate and testing guide](desktop/packaging/pi-apps/README.md) | Older-baseline QEMU candidate passed five-distribution container checks and Pi 5 smoke September 17; publication and upstream checks pending |
+| Raspberry Pi / Pi-Apps | ARM64 for Bookworm/Trixie and Ubuntu Jammy/Noble/Resolute | [1.0.1 review build and testing guide](desktop/packaging/pi-apps/README.md) | Review release published September 17; Pi-Apps submission checks running, catalog acceptance pending |
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
 | Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
 | Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Corrected 1.0.0 package tested and resubmitted September 15; Community approval pending |
@@ -34,7 +34,7 @@ packages require a distribution that satisfies their dependencies. The smaller
 Unix edition requires a C99 compiler, GNU make, and X11 development libraries;
 its frontend has been tested on Linux X11, but other Unix systems are unverified.
 
-The Intel Mac and other portable desktop downloads use the portable PC110 core,
+The 1.0.0 Intel Mac and other portable desktop downloads use the portable PC110 core,
 not QEMU, and do not include guest audio. The [Pinokio launcher](https://github.com/ahmadexp/pc110-atlas-pinokio)
 selects the Intel DMG on Intel Macs and the separate Mac App Store edition on
 Apple silicon. Import your own compatible media; guest compatibility varies.

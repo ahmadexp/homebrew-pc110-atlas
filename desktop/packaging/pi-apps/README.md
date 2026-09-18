@@ -22,10 +22,11 @@ GLIBC 2.35 or newer. Do not mix distribution repositories, force dependencies
 or modify the user's OS to bypass this requirement. The installer fails before
 downloading on an unsupported OS or architecture.
 
-## Prepared release and safety
+## Review release and safety
 
-These are the planned public URLs. The artifacts are built locally but have not
-yet been published; GitHub workflow activation is still awaiting approval.
+The 1.0.1 ARM64 review release is published. GitHub Actions is enabled for
+the fork's required checks; unrelated workflows remain disabled. Upstream
+image checks and public-artifact integration are running before PR submission.
 
 - [ARM64 1.0.1 DEB](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.1/pc110-atlas-1.0.1-linux-arm64.deb)
 - DEB SHA-256: `2890c907e7087532ff860c6aada02017913305e8701a13791936e8f80c053f5b`

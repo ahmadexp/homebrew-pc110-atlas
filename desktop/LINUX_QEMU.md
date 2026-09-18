@@ -3,8 +3,8 @@
 The Linux ARM64/x86-64 build can bundle the same PC110 QEMU devices and private
 pipe transport as the Windows edition. This replaces the portable CPU execution
 path in QEMU-enabled Linux packages. It does not repair the portable core itself.
-The public Linux 1.0.0 artifact remains unchanged. The Pi-Apps 1.0.1 candidate
-uses the older build baseline described below.
+The public Linux 1.0.0 artifact remains unchanged. The published Pi-Apps 1.0.1
+ARM64 review release uses the older build baseline described below.
 
 ## Build
 

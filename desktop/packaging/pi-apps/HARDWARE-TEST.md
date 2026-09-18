@@ -211,7 +211,9 @@ logs, `fixed-r2-layers-minimum.png`, `fixed-r2-max.png`, `fixed-picker-ready.png
 `fixed-r3-keypad-calculation.png`. The native ARM64 build and
 DEB are staged under `build/pi-fix-candidate-20260917/`.
 
-### Remaining release gates
+### Historical release gates at the private revision 3 checkpoint
+
+The older-baseline retest and publication updates below supersede this list.
 
 1. Publish a new immutable release only after reviewing the final candidate.
    Repoint the Pi-Apps checksum/URL and regenerate its ZIP together; never
@@ -263,10 +265,23 @@ Logs and screenshots are local under `build/pi-compat-20260917.t9vepz/`, with
 passing lifecycle logs named `*-integration-v2.log` and Pi smoke evidence in
 `pi-package-smoke.log`. This is not the upstream OS-image workflow.
 
-At this checkpoint no release, PR or issue has been published. A new immutable
-1.0.1 release, public-artifact helper checks and upstream OS-image checks are
-still required. GitHub Actions is initially disabled on the submission fork;
-permission to enable the required checks has been requested. ARM64-only is
-permitted by the current Pi-Apps contribution guidance. Bullseye, older systems
-and 32-bit ARM remain unsupported. No minimum-OS exception for Bookworm/Jammy
-is needed for this rebuilt candidate.
+At the initial local checkpoint, publication and GitHub-hosted checks were
+pending. The later status is tracked in [SUBMISSION.md](SUBMISSION.md).
+ARM64-only is permitted by the current Pi-Apps contribution guidance.
+Bullseye, older systems and 32-bit ARM remain unsupported. No minimum-OS
+exception for Bookworm/Jammy is needed for this rebuilt candidate.
+
+## Publication and hosted validation, September 17, 2026
+
+The unchanged final DEB and ZIP are now published in the
+[1.0.1 ARM64 review release](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.1).
+Their public downloads were rehashed and match the values above. Required QEMU
+and Temurin sources/build inputs, license material, checksums and provenance
+are attached. No private media, guest screenshots or unrelated application
+source snapshots were uploaded. Existing 1.0.0 release channels are unchanged.
+
+The submission fork enables only ShellCheck and `test_build.yml`; unrelated
+workflows remain disabled. ShellCheck passed. The final public-artifact helper
+tests and six upstream ARM64 OS-image tests are linked with current results in
+[SUBMISSION.md](SUBMISSION.md). Catalog availability still requires maintainer
+acceptance.
