@@ -1,0 +1,70 @@
+name: Pi-Apps candidate verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test installer safety and ZIP contents
+        run: |
+          python3 -m unittest discover -s desktop/packaging/tests -p test_pi_apps.py -v
+          shellcheck desktop/packaging/pi-apps/PC110\ Atlas/install-64 desktop/packaging/pi-apps/PC110\ Atlas/uninstall desktop/packaging/pi-apps/test-container.sh desktop/packaging/pi-apps/test-session.sh
+      - name: Assemble candidate from verified public release
+        run: |
+          mkdir -p build/pi-apps
+          version=$(sed -n 's/^version=//p' 'desktop/packaging/pi-apps/PC110 Atlas/install-64')
+          curl --fail --show-error --location --output "build/pi-apps/pc110-atlas-${version}-linux-arm64.deb" "https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v${version}/pc110-atlas-${version}-linux-arm64.deb"
+          python3 desktop/packaging/package-pi-apps.py --deb "build/pi-apps/pc110-atlas-${version}-linux-arm64.deb" --output "build/pi-apps/PC110-Atlas-Pi-Apps-${version}.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pi-apps-import-candidate
+          path: build/pi-apps/PC110-Atlas-Pi-Apps-*.zip
+  integration:
+    needs: contracts
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: bookworm
+            image: debian:bookworm-slim
+          - os: trixie
+            image: debian:trixie-slim
+          - os: jammy
+            image: ubuntu:22.04
+          - os: noble
+            image: ubuntu:24.04
+          - os: resolute
+            image: ubuntu:26.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Botspot/pi-apps
+          ref: 9cb5e7d21b4ec38421fd241856d1a7e106e546c0
+          path: build/pi-apps-upstream
+          persist-credentials: false
+      - name: Install, launch, render UI, reinstall and uninstall
+        env:
+          TEST_IMAGE: ${{ matrix.image }}
+        run: |
+          mkdir -p build/pi-apps-results
+          docker run --rm --platform linux/arm64 -e PC110_DISPOSABLE_CONTAINER=1 \
+            --mount "type=bind,source=$PWD/build/pi-apps-upstream,target=/upstream,readonly" \
+            --mount "type=bind,source=$PWD/desktop/packaging/pi-apps,target=/candidate,readonly" \
+            --mount "type=bind,source=$PWD/build/pi-apps-results,target=/results" \
+            "$TEST_IMAGE" bash /candidate/test-container.sh 2>&1 | tee build/pi-apps-integration.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pi-apps-${{ matrix.os }}-validation
+          path: |
+            build/pi-apps-results/
+            build/pi-apps-integration.log

@@ -53,6 +53,22 @@ for Snap Store, signed APT/YUM repositories, Chocolatey, Homebrew, and release
 signing. The Homebrew edition uses this portable core; the SwiftUI Mac Catalyst
 edition remains a separate application target.
 
+A [Pi-Apps candidate](packaging/pi-apps/README.md) is prepared for 64-bit
+Raspberry Pi OS Trixie. The existing ARM64 release passed installation, native
+launcher, UI rendering, reinstall, and uninstall tests in Debian Trixie and
+Ubuntu Noble containers using the Pi-Apps package helpers. A real 4 GB Pi 5
+test on September 17 passed installation and synthetic guest boot/input with
+a temporary media-picker workaround, but found picker and PCB-layer layout
+failures. [Hardware sign-off](packaging/pi-apps/HARDWARE-TEST.md) and upstream
+submission remain pending for that original 1.0.0 package. A separate
+[Linux QEMU fix candidate](LINUX_QEMU.md) now passes the reproduced Pi 5 issues:
+Swing media import, PCB layout, resizing, offline schematics and original/English
+PersonaWare boot and application interaction. It has not replaced
+the published package or been submitted to Pi-Apps.
+The rebuilt 1.0.1 ARM64 candidate also passes clean-container install, launch,
+graphics export and lifecycle checks on Bookworm, Trixie, Jammy, Noble and
+Resolute. It uses Ubuntu 22.04 as its build baseline. 32-bit ARM is not supported.
+
 ## Personal media
 
 Use the Run tab to import a legally obtained PC110 BIOS and a raw disk image.
@@ -77,11 +93,14 @@ user is never modified.
 - Pointer movement and primary, secondary, and middle mouse buttons are passed
   to the guest.
 - Full screen keeps a close control visible in the top-right corner.
-- Hardware schematics open in the operating system's PDF viewer.
+- Hardware schematics open in the built-in offline PDF viewer in current source.
+  The published portable 1.0.0 package still uses the system PDF viewer.
 
 The [Windows Store candidate](WINDOWS_QEMU.md) builds a native Windows QEMU
 backend with the shared PC110 device models, display, audio, input, and a live
 open-source boot demo. This backend is bundled by the Windows QEMU/Store
-pipeline. Other desktop packages continue to use the portable core unless
-they explicitly include that runtime. See the [Store release checklist](MICROSOFT_STORE.md)
+pipeline. Native Linux packages can bundle the matching ARM64/x86-64 runtime
+using the [Linux build instructions](LINUX_QEMU.md); the Linux package workflow
+now requires it. Source builds and other editions retain the portable core when
+no matching runtime is bundled. See the [Store release checklist](MICROSOFT_STORE.md)
 for the actual validation and submission status.
