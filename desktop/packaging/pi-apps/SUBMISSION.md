@@ -1,8 +1,18 @@
-# PC110 Atlas 1.0.1, Pi-Apps submission preparation
+# PC110 Atlas 1.0.1, Pi-Apps submission
 
-The ARM64 review release is published. The older-baseline package passes local
-tests on Bookworm, Trixie, Jammy, Noble and Resolute. GitHub-hosted checks are
-running before submission of the upstream PR.
+Submitted September 18, 2026: [Pi-Apps PR #3051](https://github.com/Botspot/pi-apps/pull/3051).
+The ARM64 review release is published. All five public-artifact integration
+jobs and all six selected upstream ARM64 OS-image jobs passed for the identical
+installer tree. ShellCheck also passed. Final metadata-only commit image checks
+are running. The PR is open for maintainer review, not yet accepted into the catalog.
+
+The two automatic upstream PR checks stopped at checkout, before app validation:
+[Check PR](https://github.com/Botspot/pi-apps/actions/runs/35410297399) and
+[Shellcheck](https://github.com/Botspot/pi-apps/actions/runs/35410297404).
+GitHub refuses to check out fork code in their privileged `pull_request_target`
+context. This needs upstream maintainer attention; no security override or
+upstream workflow change is part of this submission. The passing fork and
+public-artifact results below are unaffected.
 
 ## App and release
 
@@ -47,12 +57,18 @@ No external APT repository is added. Java is bundled. Proposed category:
 - 32-bit ARM and older unsupported distributions are rejected before download.
   Pi-Apps permits ARM64-only apps.
 
-See [hardware/compatibility report](HARDWARE-TEST.md). Add upstream workflow URLs
-and the resulting PR URL here when available. The all-systems issue-template
-confirmation must never be used to hide untested platforms.
+See [hardware/compatibility report](HARDWARE-TEST.md). The PR records the exact
+tested systems and limits; it does not claim physical desktop testing on every
+system. The all-systems issue-template confirmation must never be used to hide
+untested platforms.
 
 ## GitHub-hosted checks
 
-- [ShellCheck](https://github.com/ahmadexp/pi-apps/actions/runs/35289477073): passed.
+- [ShellCheck](https://github.com/ahmadexp/pi-apps/actions/runs/35410316209): passed.
 - [Public-artifact integration](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35289524731): passed on all five distributions. QEMU boot, graphics, keyboard, PCM transport, reset/restart and read-only media checks passed. Four UI exports, reinstall, repeated uninstall and preservation of both default/custom media directories also passed. The CI-rebuilt import ZIP exactly matches the published ZIP checksum.
-- [Upstream OS-image install/uninstall](https://github.com/ahmadexp/pi-apps/actions/runs/35289526490): running for Bookworm, Trixie, Pi Ubuntu Noble/Resolute and Switchroot Jammy/Noble, all ARM64. Bullseye and 32-bit jobs are intentionally disabled.
+- [Upstream OS-image install/uninstall](https://github.com/ahmadexp/pi-apps/actions/runs/35410295929): final metadata-only commit verification is running on Bookworm, Trixie, Pi Ubuntu Noble/Resolute and Switchroot Jammy/Noble, all ARM64. The identical installer tree already passed all six jobs on September 18. Bullseye and 32-bit jobs are intentionally disabled.
+
+Submission branch: `ahmadexp:pc110-atlas-1.0.1`, commit `7c1c793`.
+Only the seven app files and one `Tools/Emulation` category entry are proposed
+upstream. The distribution repository carries the release documentation and
+additional reproducible helper tests. Other release channels remain unchanged.

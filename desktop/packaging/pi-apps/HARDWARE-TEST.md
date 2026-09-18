@@ -281,7 +281,18 @@ are attached. No private media, guest screenshots or unrelated application
 source snapshots were uploaded. Existing 1.0.0 release channels are unchanged.
 
 The submission fork enables only ShellCheck and `test_build.yml`; unrelated
-workflows remain disabled. ShellCheck passed. The final public-artifact helper
-tests and six upstream ARM64 OS-image tests are linked with current results in
-[SUBMISSION.md](SUBMISSION.md). Catalog availability still requires maintainer
-acceptance.
+workflows remain disabled. ShellCheck, all five final public-artifact helper
+jobs and all six selected upstream ARM64 OS-image jobs passed. The successful
+install/uninstall messages were verified in each image log. The app is submitted
+in [PR #3051](https://github.com/Botspot/pi-apps/pull/3051); current check links
+are in [SUBMISSION.md](SUBMISSION.md). Catalog availability still requires
+maintainer acceptance.
+
+After submission, the two automatic upstream PR jobs were blocked at checkout
+by GitHub's `pull_request_target` fork-code protection, before any app check.
+The maintainer note and run links are recorded in [SUBMISSION.md](SUBMISSION.md).
+No security guard was disabled or bypassed.
+
+The unchanged installer tree was revalidated on September 18, 2026 under
+the current `pc110-atlas-1.0.1` branch. ShellCheck and all six selected upstream
+ARM64 image jobs passed again. Current run links are in SUBMISSION.md.

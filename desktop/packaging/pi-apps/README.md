@@ -26,7 +26,8 @@ downloading on an unsupported OS or architecture.
 
 The 1.0.1 ARM64 review release is published. GitHub Actions is enabled for
 the fork's required checks; unrelated workflows remain disabled. Upstream
-image checks and public-artifact integration are running before PR submission.
+image checks and public-artifact integration passed. The app is submitted in
+[Pi-Apps PR #3051](https://github.com/Botspot/pi-apps/pull/3051), awaiting maintainer review.
 
 - [ARM64 1.0.1 DEB](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.1/pc110-atlas-1.0.1-linux-arm64.deb)
 - DEB SHA-256: `2890c907e7087532ff860c6aada02017913305e8701a13791936e8f80c053f5b`
@@ -69,12 +70,12 @@ the public artifact, packaged native/QEMU smoke, four UI exports, reinstall,
 uninstall, repeated uninstall and synthetic-media preservation. The helper is
 pinned to `9cb5e7d21b4ec38421fd241856d1a7e106e546c0`. No personal media is mounted.
 
-Run upstream `test_build.yml` from the submission fork as well, then record its
-URLs in [SUBMISSION.md](SUBMISSION.md). It checks install/uninstall in actual OS
-images, not interactive graphics. Do not run autoremove-based lifecycle checks
-on a personal Pi with unrelated auto-removable packages.
+Upstream `test_build.yml` passed for all six selected ARM64 images. The workflow
+URLs are in [SUBMISSION.md](SUBMISSION.md). It checks install/uninstall in actual
+OS images, not interactive graphics. Do not run autoremove-based lifecycle
+checks on a personal Pi with unrelated auto-removable packages.
 
-Submit a PR against upstream master with exact test results and limits. Do not
+The PR against upstream master includes exact test results and limits. Do not
 claim catalog availability until maintainers accept it. Earlier 1.0.0 results
 and failed test-harness attempts are retained as history in the hardware report.
 
