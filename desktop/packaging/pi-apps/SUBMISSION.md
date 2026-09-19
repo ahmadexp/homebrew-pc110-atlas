@@ -2,9 +2,9 @@
 
 Submitted September 18, 2026: [Pi-Apps PR #3051](https://github.com/Botspot/pi-apps/pull/3051).
 The ARM64 review release is published. All five public-artifact integration
-jobs and all six selected upstream ARM64 OS-image jobs passed for the identical
-installer tree. ShellCheck also passed. Final metadata-only commit image checks
-are running. The PR is open for maintainer review, not yet accepted into the catalog.
+jobs and all six selected upstream ARM64 OS-image jobs passed for the final
+submission commit. ShellCheck also passed. The PR is open for maintainer review,
+not yet accepted into the catalog.
 
 The two automatic upstream PR checks stopped at checkout, before app validation:
 [Check PR](https://github.com/Botspot/pi-apps/actions/runs/35410297399) and
@@ -66,7 +66,7 @@ untested platforms.
 
 - [ShellCheck](https://github.com/ahmadexp/pi-apps/actions/runs/35410316209): passed.
 - [Public-artifact integration](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35289524731): passed on all five distributions. QEMU boot, graphics, keyboard, PCM transport, reset/restart and read-only media checks passed. Four UI exports, reinstall, repeated uninstall and preservation of both default/custom media directories also passed. The CI-rebuilt import ZIP exactly matches the published ZIP checksum.
-- [Upstream OS-image install/uninstall](https://github.com/ahmadexp/pi-apps/actions/runs/35410295929): final metadata-only commit verification is running on Bookworm, Trixie, Pi Ubuntu Noble/Resolute and Switchroot Jammy/Noble, all ARM64. The identical installer tree already passed all six jobs on September 18. Bullseye and 32-bit jobs are intentionally disabled.
+- [Upstream OS-image install/uninstall](https://github.com/ahmadexp/pi-apps/actions/runs/35410295929): all six selected jobs passed on September 18 for the final submission commit, Bookworm, Trixie, Pi Ubuntu Noble/Resolute and Switchroot Jammy/Noble, all ARM64. Bullseye and 32-bit jobs were intentionally disabled.
 
 Submission branch: `ahmadexp:pc110-atlas-1.0.1`, commit `7c1c793`.
 Only the seven app files and one `Tools/Emulation` category entry are proposed
