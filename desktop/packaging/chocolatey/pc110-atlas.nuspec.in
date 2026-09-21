@@ -6,6 +6,7 @@
     <title>PC110 Atlas</title>
     <authors>Open-Source-PC110</authors>
     <owners>ahmadexp</owners>
+    <copyright>Copyright (c) 2026 Ahmad Byagowi</copyright>
     <projectUrl>https://github.com/@REPOSITORY@</projectUrl>
     <packageSourceUrl>https://github.com/@REPOSITORY@/tree/main/desktop/packaging/chocolatey</packageSourceUrl>
     <docsUrl>https://github.com/@REPOSITORY@/blob/main/desktop/README.md</docsUrl>

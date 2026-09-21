@@ -80,6 +80,20 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(package.find('.//n:iconUrl', ns).text,
                          'https://cdn.jsdelivr.net/gh/owner/project@desktop-v1.2.3/desktop/packaging/pc110-atlas.png')
 
+    def test_chocolatey_copyright_matches_upstream_license(self):
+        self.artifacts()
+        output = self.root / 'manifests'
+        release.manifests(self.assets, output, '1.2.3', 'owner/project', 'chocolatey')
+        package = ET.parse(output / 'chocolatey/pc110-atlas.nuspec')
+        ns = {'n': 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd'}
+        elements = package.findall('./n:metadata/n:copyright', ns)
+        self.assertEqual(len(elements), 1, 'Chocolatey requires the copyright metadata')
+        license_path = Path(__file__).resolve().parents[3] / 'LICENSE'
+        copyright_lines = [line for line in license_path.read_text().splitlines()
+                           if line.startswith('Copyright (c) ')]
+        self.assertEqual(copyright_lines, ['Copyright (c) 2026 Ahmad Byagowi'])
+        self.assertEqual(elements[0].text, copyright_lines[0])
+
     def test_checksum_update_preserves_undownloaded_assets_and_is_idempotent(self):
         self.artifacts()
         release.checksums(self.assets)
