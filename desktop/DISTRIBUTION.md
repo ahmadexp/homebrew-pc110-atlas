@@ -5,8 +5,8 @@ Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
 installers, notarized Mac DMGs for Intel and Apple silicon, tested Snap and Chocolatey packages, and an experimental IRIX source
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
-Chocolatey Community version 1.0.0 was resubmitted with the requested icon URL
-correction on September 15, 2026 and awaits renewed checks and review.
+Chocolatey Community version 1.0.0 was resubmitted with the requested copyright
+metadata correction on September 21, 2026 and awaits renewed checks and review.
 The notarized Mac release is available through the project's Homebrew tap.
 
 The shared desktop edition uses the portable PC110 core on Linux, Windows, and
@@ -226,6 +226,10 @@ Package icons use jsDelivr, pinned to the matching `desktop-vVERSION` GitHub tag
 That tag must contain `desktop/packaging/pc110-atlas.png`; do not use a GitHub
 raw URL or a moving branch for the Chocolatey `iconUrl`.
 
+Package metadata must include `<copyright>Copyright (c) 2026 Ahmad Byagowi</copyright>`,
+matching the upstream `LICENSE`. A manifest regression test checks both presence
+and the exact license text before a package is built.
+
 For a moderation correction to an unapproved package, run **Prepare and test
 Chocolatey package** with the same version and `replace_package` enabled.
 It tests installation, launch, and uninstall before replacing only the NUPKG
@@ -243,10 +247,19 @@ jsDelivr pinned to the existing `desktop-v1.0.0` tag. The same version was
 [resubmitted successfully](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34980975480)
 on September 15, 2026, and the maintainer response was posted to the
 [package review](https://community.chocolatey.org/packages/pc110-atlas/1.0.0).
-Its status is **Maintainer responded, waiting for review/Maintainer update**.
-Renewed automated checks and moderator approval are pending; it remains unlisted
-until approved. Chocolatey's package download CDN may retain the old NUPKG for
-30 minutes after resubmission.
+On September 21 the moderator confirmed the MSI version and checksum, and
+requested the missing copyright field. The same 1.0.0 package was rebuilt with
+`Copyright (c) 2026 Ahmad Byagowi`, matching the upstream license. This was the
+only metadata change; the installer script is byte-for-byte unchanged and all
+other release asset checksums are preserved. Ten release tests and Windows
+installation, launcher, and uninstall checks passed in
+[the corrected package build](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626059075).
+The [resubmission succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626294955),
+and the package page displays the new copyright and
+**Maintainer updated, waiting for Reviewer**. Renewed automated checks and
+moderator approval are pending; it remains unlisted until approved.
+Chocolatey's package download CDN may retain the old NUPKG for 30 minutes after
+resubmission. No installer or other distribution channel was republished.
 
 Before submission, test the downloaded package from its directory:
 

@@ -1,4 +1,4 @@
-# Distribution validation, September 17, 2026
+# Distribution validation, September 21, 2026
 
 Version 1.0.0 is available from the
 [public release](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0).
@@ -41,7 +41,10 @@ are deployed and have passed checks against their public HTTPS URLs.
 | Public listing title, description, category, license, links, icon and four Ubuntu screenshots | Saved and visually verified |
 | Original Chocolatey Community automated validation, verification and virus scan | All passed before human review |
 | Chocolatey icon URL moderation correction | jsDelivr PNG verified against the release icon, pinned to `desktop-v1.0.0`; only `iconUrl` changed in package metadata, installation script unchanged |
-| Chocolatey Community 1.0.0 resubmission | [Upload succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34980975480); response posted in [review comments](https://community.chocolatey.org/packages/pc110-atlas/1.0.0); renewed automated checks and reviewer approval pending |
+| Chocolatey Community 1.0.0 icon correction resubmission, September 15 | [Upload succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/34980975480); response posted in review comments; subsequent validation, verification and virus scanning passed before the September 21 copyright request |
+| Chocolatey copyright correction, September 21 | Only the copyright element was added, matching upstream LICENSE; version, MSI URL/checksum, icon URL and byte-for-byte install script are unchanged; all other release checksums are preserved |
+| Copyright-corrected 1.0.0 NUPKG | Ten release tests passed, including a regression that failed before the fix; Windows pack, install, installed-launcher smoke and uninstall [passed](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626059075) |
+| Chocolatey Community 1.0.0 copyright resubmission | [Upload succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626294955); [package page](https://community.chocolatey.org/packages/pc110-atlas/1.0.0) displays the copyright and Maintainer updated, waiting for Reviewer; renewed checks and approval pending |
 
 The portable desktop edition bundles Eclipse Temurin 21.0.12.1+1-LTS. Its
 matching sources and build inputs are attached to the public release, together
@@ -51,7 +54,8 @@ MIT licensed; hardware material and third-party libraries retain their terms.
 Public package provenance:
 
 - Windows and Mac candidates: source commit `967f2fc146a92d6da3d736f75e3f240b4c82da3e`, build `34862491797`.
-- Corrected Chocolatey NUPKG: packaging commit `58f6670680edff326bf0f8800601c10756ee2550`, build `34980697863`; SHA-256 `3d3d20c75b0859ab54ce9165a3bbb90e0b59ca7c9b7caf740665d7800c69c0c2`. Windows installer bytes and every other release asset checksum are unchanged.
+- Historical icon-corrected Chocolatey NUPKG: packaging commit `58f6670680edff326bf0f8800601c10756ee2550`, build `34980697863`; SHA-256 `3d3d20c75b0859ab54ce9165a3bbb90e0b59ca7c9b7caf740665d7800c69c0c2`.
+- Current copyright-corrected Chocolatey NUPKG: packaging commit `bd91bcacffe729339790de8e5e68ed7e274e2462`, build `35626059075`; SHA-256 `abb71649a0f156541b78adacd9c1c94e1129e093ef853b8615ea90243c8e587f`. Windows installer bytes and every other release asset checksum are unchanged.
 - Final Mac DMGs retain that application's Java code and runtime. Their matching PC110 JNI sources were rebuilt with deployment target 12.0; archived native libraries, app bundles and DMGs were Developer ID signed before notarization. The first attempt exposed unsigned JAR-contained libraries; the final candidates correct those signatures and the minimum OS target. See the release's `BUILD-PROVENANCE.json` for final notarization IDs.
 - Linux packages with the pinned runtime: source commit `83f54c4faa7c124f91df5ab44e0022c11757a66f`, build `34864108656`.
 - Snap packages with the pinned runtime: source commit `4efc1a0eb0e7326ac599b7e10df8ca9830edf167`, successful Snap jobs in build `34863723925`. Linux jobs in that earlier run failed at Java setup and were replaced by the successful Linux build above.
