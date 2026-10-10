@@ -283,7 +283,26 @@ Install the notarized release from the project's tap:
 
 ```sh
 brew tap ahmadexp/pc110-atlas
+brew trust --cask ahmadexp/pc110-atlas/pc110-atlas
 brew install --cask pc110-atlas
+```
+
+Homebrew 6 and later require trust for third-party packages. The command above
+trusts only the PC110 Atlas cask, not the entire tap. Only grant trust if you
+trust this project's package code to run with your user privileges. See
+[Homebrew's tap trust documentation](https://docs.brew.sh/Tap-Trust).
+
+Alternatively, install using the fully qualified cask name. This works on older
+Homebrew versions without the `trust` command and grants cask-only trust on
+Homebrew 6 and later:
+
+```sh
+brew install --cask ahmadexp/pc110-atlas/pc110-atlas
+```
+
+To update an existing installation:
+
+```sh
 brew upgrade --cask pc110-atlas
 ```
 

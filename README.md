@@ -75,7 +75,21 @@ macOS 12 or later, Intel or Apple silicon:
 
 ```sh
 brew tap ahmadexp/pc110-atlas
+brew trust --cask ahmadexp/pc110-atlas/pc110-atlas
 brew install --cask pc110-atlas
+```
+
+Homebrew 6 and later require trust for third-party packages. This trusts only
+the PC110 Atlas cask, not the entire tap. Only grant trust if you trust this
+project's package code to run with your user privileges. See
+[Homebrew's tap trust documentation](https://docs.brew.sh/Tap-Trust).
+
+For a one-command installation, including on older Homebrew versions without
+the `trust` command, use the fully qualified name. Homebrew 6 and later grant
+trust only to this cask:
+
+```sh
+brew install --cask ahmadexp/pc110-atlas/pc110-atlas
 ```
 
 Alternatively, open the DMG matching your Mac and drag PC110 Atlas to Applications.
