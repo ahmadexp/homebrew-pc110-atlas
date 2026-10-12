@@ -28,12 +28,12 @@ test -d "$scratch/mount/PC110 Atlas.app"
 ditto "$scratch/mount/PC110 Atlas.app" "$scratch/image/PC110 Atlas.app"
 hdiutil detach "$scratch/mount" -quiet
 mounted=false
-replacement_args=()
+signer_args=("$script_dir/sign-jar-natives.py" "$scratch/image/PC110 Atlas.app/Contents/app"
+  --identity "Developer ID Application: $MAC_SIGN_ID")
 if [[ -n "${PC110_NATIVE_LIBRARY:-}" ]]; then
-  replacement_args=(--pc110-native-library "$PC110_NATIVE_LIBRARY")
+  signer_args+=(--pc110-native-library "$PC110_NATIVE_LIBRARY")
 fi
-python3 "$script_dir/sign-jar-natives.py" "$scratch/image/PC110 Atlas.app/Contents/app" \
-  --identity "Developer ID Application: $MAC_SIGN_ID" "${replacement_args[@]}"
+python3 "${signer_args[@]}"
 "$JAVA_HOME/bin/jpackage" --type app-image --app-image "$scratch/image/PC110 Atlas.app" \
   --mac-sign --mac-signing-key-user-name "$MAC_SIGN_ID" \
   --mac-entitlements "$script_dir/macos-entitlements.plist"

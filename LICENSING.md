@@ -23,11 +23,13 @@ under GPLv2 with the Classpath Exception and additional component notices.
 Source releases are available from [Eclipse Adoptium](https://adoptium.net/temurin/releases/).
 
 QEMU, SeaBIOS, GLib, and Pixman are separate third-party components used by
-QEMU-enabled application editions, including Windows and Linux desktop
+QEMU-enabled application editions, including Mac, Windows and Linux desktop
 candidates. Their existing license texts and corresponding source requirements
 apply whenever those components are distributed. The desktop QEMU package
-includes its exact modified QEMU source and firmware notices; Linux links to
-system GLib and Pixman rather than bundling those libraries. The portable
+includes its exact modified QEMU source and firmware notices. Mac 1.0.2 also
+includes corresponding source and notices for its bundled GLib, libffi, PCRE2,
+gettext and Pixman libraries. Linux links to system GLib and Pixman rather than
+bundling those libraries. The portable
 desktop 1.0.0 release and the IRIX C/X11 source kit do not bundle QEMU or IBM
 firmware. The IRIX frontend links to the workstation's system X11 library.
 

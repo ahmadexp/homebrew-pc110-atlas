@@ -7,11 +7,20 @@ installers, notarized Mac DMGs for Intel and Apple silicon, tested Snap and Choc
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
 Chocolatey Community version 1.0.0 was resubmitted with the requested copyright
 metadata correction on September 21, 2026 and awaits renewed checks and review.
-The notarized Mac release is available through the project's Homebrew tap.
+Mac/Homebrew 1.0.2 replaces only the standalone Intel and Apple silicon DMGs.
+See [release notes](RELEASE-1.0.2.md) and [installer validation](QA-MACOS-1.0.2.md).
 
-The shared desktop edition uses the portable PC110 core on Linux, Windows, and
-macOS. The Homebrew edition is separate from the SwiftUI Mac Catalyst app and
-its QEMU backend. IRIX uses the smaller [C/X11 Unix edition](../unix/README.md).
+Published 1.0.0 desktop installers use the portable PC110 core. Mac 1.0.2 bundles
+the native emulator; Linux and Windows channels update separately. The Homebrew
+edition remains separate from the SwiftUI Mac Catalyst app. IRIX uses the smaller
+[C/X11 Unix edition](../unix/README.md).
+
+Pi-Apps preparation is documented in [the candidate guide](packaging/pi-apps/README.md).
+The ARM64 Trixie/Noble candidate has local container verification and partial
+[Pi 5 testing](packaging/pi-apps/HARDWARE-TEST.md), but is not submitted or
+accepted. Native picker/layout fixes, remaining hardware checks, and upstream's
+supported-system requirements remain release gates. This does not add the app
+to Raspberry Pi OS's official APT repositories.
 
 ## Build targets
 
@@ -45,11 +54,16 @@ MSI limits of 255.255.65535, and increase it for every public release.
 ./android/gradlew -p desktop test packageDeb packageRpm
 
 # macOS
-./android/gradlew -p desktop test packageDmg
+python3 desktop/qemu/build-macos.py desktop/build/qemu-macos
+python3 desktop/qemu/package-macos.py desktop/build/qemu-macos desktop/build/qemu-runtime-macos-arm64
+./android/gradlew -p desktop test packageDmg -PrequireMacQemu=true
 
 # Release tooling tests
 python3 -m unittest discover -s desktop/packaging/tests -v
 ```
+
+Use `qemu-runtime-macos-x64` for an Intel build. See the Mac guide for native
+dependency tools and the final-signing integrity checks.
 
 ```powershell
 # Windows, with WiX Toolset 3.14.1 on PATH
@@ -366,15 +380,26 @@ bash desktop/packaging/sign-macos-candidate.sh candidate.dmg signed-output.dmg
 NOTARY_KEYCHAIN_PROFILE=your-profile bash desktop/packaging/notarize-macos.sh signed-output.dmg
 ```
 
-The signing script first signs every `.dylib` and `.jnilib` inside packaged
-JARs, including nested PC110 JNI resources and Skiko's other-architecture
-library. It refreshes any matching `.sha256` cache keys, preserves unrelated
+The signing script first signs the native payloads inside packaged JARs,
+including `.dylib`, `.jnilib`, Mac emulator executables and private `.dylib.bin`
+resources. It refreshes matching `.sha256` cache keys and the runtime's integrity
+manifest, preserves unrelated
 archive contents, and refuses to invalidate existing Java archive signatures.
 It then uses the same JVM entitlements as Compose, verifies the app signature,
 and signs the DMG. Checking only the outer app with `codesign --deep` does not
 validate native code inside JAR archives. Test the final packaged launcher
 again after signing. Regression tests cover archive preservation, checksum
 refresh and failed signing without replacing the original JAR.
+
+After notarization and stapling, run the final checks on each native architecture:
+
+```sh
+bash desktop/packaging/verify-macos-candidate.sh signed-output.dmg new-evidence-directory 1.0.2
+```
+
+This checks Gatekeeper, signatures, version and architecture, then boots the
+bundled demo and tests graphics, input, PCM transport, reset and restart. It does
+not substitute for private operating-system or full guest-driver validation.
 
 The PC110 native CMake target defaults to macOS 12.0 before compiler detection.
 For old candidates built with the build host's newer deployment target, rebuild

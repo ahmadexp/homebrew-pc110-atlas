@@ -11,7 +11,9 @@ import zipfile
 def sign_jar(jar, signer, native_overrides=None):
     with zipfile.ZipFile(jar) as archive:
         entries = archive.infolist()
-        libraries = [item for item in entries if item.filename.endswith(('.dylib', '.jnilib'))]
+        libraries = [item for item in entries if item.filename.endswith(('.dylib', '.jnilib')) or
+                     (item.filename.startswith('qemu/macos-') and
+                      item.filename.endswith(('/qemu-system-i386', '.dylib.bin')))]
         if not libraries:
             return 0
         if len({item.filename for item in entries}) != len(entries):
@@ -28,6 +30,21 @@ def sign_jar(jar, signer, native_overrides=None):
             if checksum in archive.namelist():
                 # Skiko uses this digest to choose its extracted-library cache.
                 replacements[checksum] = hashlib.sha256(signed).hexdigest().encode('ascii')
+        # The QEMU host verifies every extracted runtime file. Signing changes
+        # executable bytes, so seal the manifest with those same signed bytes.
+        for item in entries:
+            if not (item.filename.startswith('qemu/macos-') and item.filename.endswith('/files.sha256')):
+                continue
+            prefix = item.filename.removesuffix('files.sha256')
+            lines = []
+            for line in archive.read(item).decode('utf-8').splitlines():
+                _, name = line.split('  ', 1)
+                entry_name = prefix + name + ('.bin' if name.endswith('.dylib') else '')
+                data = replacements.get(entry_name)
+                if data is None:
+                    data = archive.read(entry_name)
+                lines.append(f'{hashlib.sha256(data).hexdigest()}  {name}\n')
+            replacements[item.filename] = ''.join(lines).encode('utf-8')
         with tempfile.TemporaryDirectory(prefix='pc110-signed-jar-', dir=jar.parent) as scratch:
             output = Path(scratch) / jar.name
             with zipfile.ZipFile(output, 'w') as target:

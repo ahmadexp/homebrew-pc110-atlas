@@ -1,6 +1,7 @@
 import hashlib
 import importlib.util
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -11,6 +12,44 @@ spec.loader.exec_module(signing)
 
 
 class JarSigningTests(unittest.TestCase):
+    def test_shell_signer_arguments_with_and_without_core_override(self):
+        script = (Path(__file__).parents[1] / 'sign-macos-candidate.sh').read_text()
+        arguments = script.split('signer_args=', 1)[1].split('"$JAVA_HOME/bin/jpackage"', 1)[0]
+        prefix = '''script_dir='/tmp/tools path'
+scratch='/tmp/candidate path'
+MAC_SIGN_ID='Test Publisher (TEAM)'
+unset PC110_NATIVE_LIBRARY
+if [[ -n "$1" ]]; then PC110_NATIVE_LIBRARY=$1; fi
+python3() { printf '%s\\n' "$@"; }
+'''
+        expected = ['/tmp/tools path/sign-jar-natives.py',
+                    '/tmp/candidate path/image/PC110 Atlas.app/Contents/app',
+                    '--identity', 'Developer ID Application: Test Publisher (TEAM)']
+        for override in ('', '/tmp/rebuilt core.dylib'):
+            result = subprocess.check_output(
+                ['bash', '-uc', prefix + 'signer_args=' + arguments, 'signer-test', override],
+                text=True).splitlines()
+            self.assertEqual(result, expected + (['--pc110-native-library', override] if override else []))
+
+    def test_qemu_executable_and_private_libraries_refresh_integrity_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            jar = Path(directory) / 'app.jar'
+            prefix = 'qemu/macos-arm64/'
+            files = {'qemu-system-i386': b'executable', 'lib/libglib.dylib': b'glib',
+                     'data/atlas-demo.img': b'demo'}
+            with zipfile.ZipFile(jar, 'w') as archive:
+                for name, data in files.items():
+                    archive.writestr(prefix + name + ('.bin' if name.endswith('.dylib') else ''), data)
+                archive.writestr(prefix + 'files.sha256', ''.join(
+                    f'{hashlib.sha256(data).hexdigest()}  {name}\n' for name, data in files.items()))
+            self.assertEqual(signing.sign_jar(jar, lambda data: data + b'-signed'), 2)
+            with zipfile.ZipFile(jar) as archive:
+                self.assertEqual(archive.read(prefix + 'qemu-system-i386'), b'executable-signed')
+                for line in archive.read(prefix + 'files.sha256').decode().splitlines():
+                    digest, name = line.split('  ', 1)
+                    entry = prefix + name + ('.bin' if name.endswith('.dylib') else '')
+                    self.assertEqual(digest, hashlib.sha256(archive.read(entry)).hexdigest())
+
     def test_nested_and_other_architecture_libraries_and_cache_hashes(self):
         with tempfile.TemporaryDirectory() as directory:
             jar = Path(directory) / 'app.jar'

@@ -10,7 +10,8 @@ workflows, store assets, and the experimental IRIX source edition.
 ## Platform compatibility
 
 PC110 Atlas brings the PC110 hardware reference and emulator to modern devices.
-Availability checked September 14, 2026.
+Mac/Homebrew availability updated October 12, 2026. Other rows retain their
+previously recorded channel status; this Mac update does not republish them.
 
 | Platform / channel | Compatibility | Download or installation | Availability |
 | --- | --- | --- | --- |
@@ -26,7 +27,7 @@ Availability checked September 14, 2026.
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
 | Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
 | Windows / Chocolatey | Windows 10 or later, x64 | [NUPKG download](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas.1.0.0.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Corrected 1.0.0 package tested and resubmitted September 15; Community approval pending |
-| Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-macos-arm64.dmg), or Homebrew below | Available; Developer ID signed and Apple notarized |
+| Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.2/pc110-atlas-1.0.2-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.2/pc110-atlas-1.0.2-macos-arm64.dmg), or Homebrew below | 1.0.2; Developer ID signed and Apple notarized; Windows 95 experimental |
 | IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
 
 The Mac App Store and Homebrew packages are separate editions. Native Linux
@@ -34,13 +35,21 @@ packages require a distribution that satisfies their dependencies. The smaller
 Unix edition requires a C99 compiler, GNU make, and X11 development libraries;
 its frontend has been tested on Linux X11, but other Unix systems are unverified.
 
-The 1.0.0 Intel Mac and other portable desktop downloads use the portable PC110 core,
-not QEMU, and do not include guest audio. The [Pinokio launcher](https://github.com/ahmadexp/pc110-atlas-pinokio)
-selects the Intel DMG on Intel Macs and the separate Mac App Store edition on
-Apple silicon. Import your own compatible media; guest compatibility varies.
+Mac/Homebrew 1.0.2 adds complete media ZIP import, Japanese font ROM import,
+custom PNG shells, raw disks up to 4 GiB, a 3D PCB explorer, and bundled native
+emulation with guest audio and persistent writes to private disk copies. Windows 95
+is experimental: an intermittent guest VMM crash and a DOS text-layout issue
+remain. See [release notes](desktop/RELEASE-1.0.2.md) and
+[validation limits](desktop/QA-MACOS-1.0.2.md). No proprietary media is included.
 
-[All desktop downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0)
-include the portable desktop release, while the
+Older 1.0.0 portable downloads use the portable core without the full emulator or guest audio.
+The [Pinokio launcher](https://github.com/ahmadexp/pc110-atlas-pinokio) is a separate
+distribution channel; its pinned versions do not change with this Homebrew update.
+Import your own compatible media; guest compatibility varies.
+
+[Mac 1.0.2 downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.2)
+are separate from the [1.0.0 portable desktop downloads](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0).
+The historical
 [distribution validation record](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/desktop/DISTRIBUTION_VALIDATION.md)
 details what has been tested.
 
@@ -93,6 +102,8 @@ brew install --cask ahmadexp/pc110-atlas/pc110-atlas
 ```
 
 Alternatively, open the DMG matching your Mac and drag PC110 Atlas to Applications.
+For an existing Homebrew installation, run `brew update` followed by
+`brew upgrade --cask pc110-atlas`. Shut down the guest and back up your media first.
 Do not replace a different edition already installed; keep both if needed.
 The portable app has bundle ID `org.opensourcepc110.atlas.desktop`, separate from
 the Mac App Store app. Leave Gatekeeper enabled. Compare the downloaded file's
@@ -108,6 +119,8 @@ release. See [runtime source details](desktop/packaging/RUNTIME-SOURCES.md).
 ## Documentation and support
 
 - [Desktop usage](desktop/README.md)
+- [Mac 1.0.2 changes and known limits](desktop/RELEASE-1.0.2.md)
+- [Media ZIPs, font ROM and custom shells](desktop/MEDIA-PACKAGES.md)
 - [IRIX build and testing](unix/README.md)
 - [Publishing guide](desktop/DISTRIBUTION.md)
 - [License scope and third-party terms](LICENSING.md)
