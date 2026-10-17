@@ -5,13 +5,15 @@ Chocolatey, and Homebrew. The workflows prepare real installers and derive
 checksums from their contents. Version 1.0.0 has public Linux and Windows
 installers, notarized Mac DMGs for Intel and Apple silicon, tested Snap and Chocolatey packages, and an experimental IRIX source
 kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
-Chocolatey Community version 1.0.0 was resubmitted with the requested copyright
-metadata correction on September 21, 2026 and awaits renewed checks and review.
-Mac/Homebrew 1.0.2 replaces only the standalone Intel and Apple silicon DMGs.
-See [release notes](RELEASE-1.0.2.md) and [installer validation](QA-MACOS-1.0.2.md).
+Chocolatey Community version 1.0.0 was approved on September 23, 2026 after the
+requested copyright metadata correction. Its public status was checked on
+October 16, 2026.
+Mac/Homebrew 1.0.3 replaces only the standalone Intel and Apple silicon DMGs,
+adding direct pointing and the corrected Up key.
+See [release notes](RELEASE-MACOS-1.0.3.md) and [installer validation](QA-MACOS-1.0.3.md).
 
 Published 1.0.0 desktop installers use the portable PC110 core. Mac 1.0.2 bundles
-the native emulator; Linux and Windows channels update separately. The Homebrew
+the native emulator, retained in 1.0.3; Linux and Windows channels update separately. The Homebrew
 edition remains separate from the SwiftUI Mac Catalyst app. IRIX uses the smaller
 [C/X11 Unix edition](../unix/README.md).
 
@@ -78,6 +80,54 @@ image, and import disposable test media. Run GUI checks before promotion:
 launch, import a BIOS and disk, boot, exercise keyboard and pointer input,
 open a schematic, quit, upgrade, and confirm imported media remains available.
 For snaps, also test removable media and the desktop portal on Ubuntu.
+
+### Local builds without hosted runners
+
+As of October 16, 2026, Actions is disabled for the private source repository
+and its five registered build workflows are disabled. Builds and validation
+run locally; source pushes and manual release uploads do not require Actions.
+Do not enable a hosted workflow as a fallback without maintainer approval.
+Existing workflow files remain as reference recipes, not the active release
+path. Re-enabling Actions is reversible and is not needed for local builds.
+
+GitHub-hosted jobs are optional. Run the same build, package and validation
+commands from a source checkout on the appropriate local machine, then upload
+only verified release assets. This does not require registering a persistent
+self-hosted runner or changing GitHub billing settings. Source pushes, release
+uploads and package-feed updates remain separate from build execution.
+
+- Apple silicon Mac: build the native runtime, run the keyboard parity check
+  (`python3 desktop/packaging/check-keyboard-parity.py`), run the desktop and
+  packaging tests, and create the DMG using the commands above. Use a native
+  CMake and the pinned Temurin JDK on `PATH`; an old Gradle daemon can retain
+  another toolchain, so use `--no-daemon` when switching build environments.
+- Intel Mac: run the same steps on an Intel build environment, selecting
+  `qemu-runtime-macos-x64`. Keep architecture-specific output directories
+  separate. An Apple silicon test does not validate the Intel installer.
+  Keep the build Mac fully awake on AC power and bind `caffeinate -is` to the
+  build command. Use a persistent build log so an SSH disconnect does not
+  lose the build result. A successful SSH connection during a brief network
+  maintenance wake is not proof that the machine will stay available.
+  Build-only Python tools can use a project-specific virtual environment;
+  the October 17 Intel build uses Python 3.15.0 and Meson 1.11.1 without
+  changing the system Python.
+- Windows x64: reproduce the WiX 3 and MSYS2 UCRT64 dependencies in the
+  **Desktop packages** workflow. Run `bash desktop/qemu/build-windows.sh` from
+  UCRT64, then the dependency-source collection and pipe test from that
+  workflow. Build with `android\gradlew.bat -p desktop test packageMsi packageExe
+  -PrequireWindowsQemu=true --no-daemon`. Test MSI installation, the installed
+  launcher, guest input and display, and Chocolatey installation/uninstallation
+  on Windows before promotion.
+
+The [packaging tool requires the target operating system](https://docs.oracle.com/en/java/javase/21/jpackage/packaging-overview.html).
+A Mac-only build cannot stand in for a Windows package and installation test.
+The existing Mac scripts support local signing without exporting the private
+key: `sign-macos-candidate.sh`, `notarize-macos.sh` and
+`verify-macos-candidate.sh`. Supply the existing Developer ID and Keychain
+notarization profile through their documented environment variables. Keep
+credentials, personal media and the private source checkout out of release
+uploads. Both Mac architectures still require signed-installer verification
+before the default Homebrew cask is updated.
 
 Configure macOS signing secrets before creating a release:
 
@@ -268,10 +318,9 @@ only metadata change; the installer script is byte-for-byte unchanged and all
 other release asset checksums are preserved. Ten release tests and Windows
 installation, launcher, and uninstall checks passed in
 [the corrected package build](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626059075).
-The [resubmission succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626294955),
-and the package page displays the new copyright and
-**Maintainer updated, waiting for Reviewer**. Renewed automated checks and
-moderator approval are pending; it remains unlisted until approved.
+The [resubmission succeeded](https://github.com/ahmadexp/homebrew-pc110-atlas/actions/runs/35626294955).
+The package was approved on September 23, 2026 and is publicly installable,
+as verified on October 16, 2026.
 Chocolatey's package download CDN may retain the old NUPKG for 30 minutes after
 resubmission. No installer or other distribution channel was republished.
 

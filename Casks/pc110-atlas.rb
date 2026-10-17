@@ -1,9 +1,9 @@
 cask "pc110-atlas" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.0.2"
-  sha256 arm:   "382437cb5af43cec48708463851126a88885a349d14ecc1cc5223e7c102bb649",
-         intel: "676155ead9ce089b04035f62321af77e2eb3707aa1e3f7fb41350d18ad4e320b"
+  version "1.0.3"
+  sha256 arm:   "1a7bbe5d4a9dbd66f926d812f2afcb77f2d04d657f13d9bd0dd3c8c375941bd2",
+         intel: "065852b5a51d55e19aee2c64fb57a7f5ec56e9eb6431610dfd064981d390b839"
 
   url "https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v#{version}/pc110-atlas-#{version}-macos-#{arch}.dmg"
   name "PC110 Atlas"
