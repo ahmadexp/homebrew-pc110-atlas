@@ -11,9 +11,9 @@ workflows, store assets, and the experimental IRIX source edition.
 
 PC110 Atlas brings the PC110 hardware reference and emulator to modern devices.
 Mac/Homebrew and standalone Windows availability updated October 17, 2026.
-Chocolatey 1.0.3 passed local installation testing; Community submission is
-still pending. Other rows retain their previously recorded channel status;
-this desktop update does not republish them.
+Chocolatey 1.0.3 passed local installation testing and was submitted on October
+17; automated checks and moderation are pending. Other rows retain their
+previously recorded channel status; this desktop update does not republish them.
 
 | Platform / channel | Compatibility | Download or installation | Availability |
 | --- | --- | --- | --- |
@@ -28,7 +28,7 @@ this desktop update does not republish them.
 | Raspberry Pi / Pi-Apps | ARM64 for Bookworm/Trixie and Ubuntu Jammy/Noble/Resolute | [1.0.1 review build and testing guide](desktop/packaging/pi-apps/README.md) | [Submitted in PR #3051](https://github.com/Botspot/pi-apps/pull/3051); five-distribution integration and six ARM64 OS-image checks passed, maintainer approval pending |
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
 | Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-windows-x64.exe) | 1.0.3 available; direct screen pointing and corrected Up key; Windows 95 experimental |
-| Windows / Chocolatey | Windows 10 or later, x64 | [Approved Community package](https://community.chocolatey.org/packages/pc110-atlas/1.0.0), [tested 1.0.3 NUPKG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas.1.0.3.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Community 1.0.0 approved September 23; 1.0.3 tested locally, submission pending |
+| Windows / Chocolatey | Windows 10 or later, x64 | [1.0.3 submission](https://community.chocolatey.org/packages/pc110-atlas/1.0.3), [tested NUPKG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas.1.0.3.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | 1.0.3 submitted October 17, automated checks and moderation pending; 1.0.0 remains approved |
 | Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-macos-arm64.dmg), or Homebrew below | 1.0.3; direct screen pointing and corrected Up key; Developer ID signed and Apple notarized; Windows 95 experimental |
 | IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
 

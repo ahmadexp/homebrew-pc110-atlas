@@ -10,8 +10,9 @@ and the corrected Up-key layout. All builds and installer tests ran locally.
 See the [Mac release notes](RELEASE-MACOS-1.0.3.md),
 [Windows release notes](RELEASE-WINDOWS-1.0.3.md),
 [Mac validation](QA-MACOS-1.0.3.md) and [Windows validation](QA-WINDOWS-1.0.3.md).
-The tested Chocolatey 1.0.3 package is available on GitHub; Community submission
-is pending. Linux and other platform channels are unchanged by this release.
+The tested Chocolatey 1.0.3 package is available on GitHub and was submitted to
+the Community Repository on October 17. Automated checks and moderation are
+pending. Linux and other platform channels are unchanged by this release.
 
 ## Run from source
 

@@ -46,8 +46,10 @@ installation or personal media was removed.
 
 NUPKG SHA-256:
 `78c71d395716f7ed46de715cc2cd0fd6f53190dd2525f89bf2a037057b2f14e9`.
-This local validation does not mean the Community Repository has approved
-the update; its submission and moderation status are separate.
+The Community Repository accepted the upload on October 17. Its package page
+shows validation, verification and scanning pending. Local validation does
+not mean the Community Repository has approved the update; moderation is
+still pending.
 
 ## Limits
 

@@ -21,8 +21,10 @@ warning. Shut down the guest and back up imported media before updating.
 
 The matching Chocolatey NUPKG also passed installation from the public,
 checksum-pinned MSI, installed-app tests and automatic removal. It is available
-with the GitHub release for local installation. Community Repository 1.0.0
-remains the approved version until the 1.0.3 submission is accepted and reviewed.
+with the GitHub release for local installation. Version 1.0.3 was
+[submitted to Chocolatey](https://community.chocolatey.org/packages/pc110-atlas/1.0.3)
+on October 17 and is awaiting automated checks and moderation. Community
+Repository 1.0.0 remains the approved version until 1.0.3 is approved.
 
 Windows 95 remains experimental. Known guest stability and text-layout issues
 remain; exact pointing is not guaranteed for every imported disk.

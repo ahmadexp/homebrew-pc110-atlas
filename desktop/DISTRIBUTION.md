@@ -16,8 +16,9 @@ Windows 1.0.3 MSI/EXE and a locally tested Chocolatey package were also built
 without hosted runners and published on October 17. See
 [Windows release notes](RELEASE-WINDOWS-1.0.3.md) and
 [native installer/package validation](QA-WINDOWS-1.0.3.md).
-The Community Repository remains at approved version 1.0.0 until the new
-package is submitted and reviewed.
+Chocolatey 1.0.3 was submitted on October 17 and is awaiting automated checks
+and moderation. The Community Repository's approved version remains 1.0.0
+until the new package is approved.
 
 Published 1.0.0 desktop installers use the portable PC110 core. Mac 1.0.2 bundles
 the native emulator, retained in Mac and Windows 1.0.3; Linux channels update separately. The Homebrew
