@@ -5,6 +5,14 @@ media import, interactive PCB layers, vector schematics, archive, and credits
 to Linux, Windows, and macOS from one Compose Desktop codebase. It does not contain IBM
 firmware, PersonaWare, DOS, Windows, or any other operating-system media.
 
+Mac/Homebrew and standalone Windows 1.0.3 are published, with direct pointing
+and the corrected Up-key layout. All builds and installer tests ran locally.
+See the [Mac release notes](RELEASE-MACOS-1.0.3.md),
+[Windows release notes](RELEASE-WINDOWS-1.0.3.md),
+[Mac validation](QA-MACOS-1.0.3.md) and [Windows validation](QA-WINDOWS-1.0.3.md).
+The tested Chocolatey 1.0.3 package is available on GitHub; Community submission
+is pending. Linux and other platform channels are unchanged by this release.
+
 ## Run from source
 
 The build commands below require the application source checkout. The public
@@ -120,8 +128,11 @@ user is never modified.
   media or custom artwork. **Pause / Resume** temporarily suspends the guest.
 - The standard PC keyboard, function keys, arrows, navigation keys, and common
   punctuation are passed to the guest through BIOS key values.
-- Pointer movement and primary, secondary, and middle mouse buttons are passed
-  to the guest.
+- Host pointer movement over the LCD automatically aligns the guest cursor.
+  Primary, secondary, and middle buttons reach the guest after positioning.
+  TrackPoint control remains relative; the next LCD interaction restores direct
+  pointing. No input-mode setting is needed. The pen pad remains independent.
+  See the [1.0.3 notes](RELEASE-MACOS-1.0.3.md) for guest setup and limits.
 - Full screen keeps a close control visible in the top-right corner.
 - Open **Hardware > 3D PCB** beside any of the five boards. Drag to orbit and
   rotate, scroll to zoom, or use the camera sliders. Layer spacing, individual

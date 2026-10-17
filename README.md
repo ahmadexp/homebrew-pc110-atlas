@@ -10,9 +10,10 @@ workflows, store assets, and the experimental IRIX source edition.
 ## Platform compatibility
 
 PC110 Atlas brings the PC110 hardware reference and emulator to modern devices.
-Mac/Homebrew availability updated October 17, 2026, and Chocolatey approval
-verified October 16. Other rows retain their
-previously recorded channel status; this Mac update does not republish them.
+Mac/Homebrew and standalone Windows availability updated October 17, 2026.
+Chocolatey 1.0.3 passed local installation testing; Community submission is
+still pending. Other rows retain their previously recorded channel status;
+this desktop update does not republish them.
 
 | Platform / channel | Compatibility | Download or installation | Availability |
 | --- | --- | --- | --- |
@@ -26,8 +27,8 @@ previously recorded channel status; this Mac update does not republish them.
 | Linux / APT | amd64 and arm64; tested on Ubuntu 24.04 | [Signed APT repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; DEB packages |
 | Raspberry Pi / Pi-Apps | ARM64 for Bookworm/Trixie and Ubuntu Jammy/Noble/Resolute | [1.0.1 review build and testing guide](desktop/packaging/pi-apps/README.md) | [Submitted in PR #3051](https://github.com/Botspot/pi-apps/pull/3051); five-distribution integration and six ARM64 OS-image checks passed, maintainer approval pending |
 | Linux / YUM and DNF | x86_64 and aarch64; compatible RPM distributions | [Signed YUM/DNF repository and setup](https://ahmadexp.github.io/homebrew-pc110-atlas/) | Available; RPM packages |
-| Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.0/pc110-atlas-1.0.0-windows-x64.exe) | Available |
-| Windows / Chocolatey | Windows 10 or later, x64 | [Chocolatey package](https://community.chocolatey.org/packages/pc110-atlas/1.0.0) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | 1.0.0 approved September 23, 2026; verified October 16 |
+| Windows installers | Windows 10 or later, x64 | [MSI](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-windows-x64.msi) or [EXE](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-windows-x64.exe) | 1.0.3 available; direct screen pointing and corrected Up key; Windows 95 experimental |
+| Windows / Chocolatey | Windows 10 or later, x64 | [Approved Community package](https://community.chocolatey.org/packages/pc110-atlas/1.0.0), [tested 1.0.3 NUPKG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas.1.0.3.nupkg) and [installation guide](https://github.com/ahmadexp/homebrew-pc110-atlas#install) | Community 1.0.0 approved September 23; 1.0.3 tested locally, submission pending |
 | Mac desktop / Homebrew | macOS 12 or later; Intel and Apple silicon | [Intel DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-macos-x64.dmg), [Apple silicon DMG](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/download/desktop-v1.0.3/pc110-atlas-1.0.3-macos-arm64.dmg), or Homebrew below | 1.0.3; direct screen pointing and corrected Up key; Developer ID signed and Apple notarized; Windows 95 experimental |
 | IRIX / Unix X11 | Experimental IRIX 6.5, MIPS n32 target | [IRIX source test kit](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/irix-v1.0.0) and [build instructions](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/unix/README.md) | Source only; testing on SGI hardware is still required |
 
@@ -36,21 +37,23 @@ packages require a distribution that satisfies their dependencies. The smaller
 Unix edition requires a C99 compiler, GNU make, and X11 development libraries;
 its frontend has been tested on Linux X11, but other Unix systems are unverified.
 
-Mac/Homebrew 1.0.3 adds direct screen pointing and the latest iPhone keyboard
-layout with the corrected Up key. It retains complete media ZIP import, Japanese
+Mac/Homebrew and Windows 1.0.3 add direct screen pointing and the latest iPhone
+keyboard layout with the corrected Up key. They include complete media ZIP import, Japanese
 font ROM import, custom PNG shells, raw disks up to 4 GiB, a 3D PCB explorer,
 and bundled native emulation with guest audio and persistent writes to private
 disk copies. Windows 95
 is experimental: an intermittent guest VMM crash and a DOS text-layout issue
-remain. See [release notes](desktop/RELEASE-MACOS-1.0.3.md) and
-[validation limits](desktop/QA-MACOS-1.0.3.md). No proprietary media is included.
+remain. See the [Mac release notes](desktop/RELEASE-MACOS-1.0.3.md),
+[Windows release notes](desktop/RELEASE-WINDOWS-1.0.3.md),
+[Mac validation](desktop/QA-MACOS-1.0.3.md) and
+[Windows validation](desktop/QA-WINDOWS-1.0.3.md). No proprietary media is included.
 
 Older 1.0.0 portable downloads use the portable core without the full emulator or guest audio.
 The [Pinokio launcher](https://github.com/ahmadexp/pc110-atlas-pinokio) is a separate
 distribution channel; its pinned versions do not change with this Homebrew update.
 Import your own compatible media; guest compatibility varies.
 
-[Mac 1.0.3 downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.3)
+[Mac and Windows 1.0.3 downloads and checksums](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.3)
 are separate from the [1.0.0 portable desktop downloads](https://github.com/ahmadexp/homebrew-pc110-atlas/releases/tag/desktop-v1.0.0).
 The historical
 [distribution validation record](https://github.com/ahmadexp/homebrew-pc110-atlas/blob/main/desktop/DISTRIBUTION_VALIDATION.md)
@@ -72,8 +75,8 @@ Repository signing-key fingerprint:
 The [public key](desktop/packaging/keys/pc110-atlas.asc) expires September 13, 2028.
 
 Windows: download the MSI/EXE from Releases, or download the NUPKG and install
-it from its directory with `choco install pc110-atlas --source . --version 1.0.0`.
-The package downloads the public MSI and verifies its checksum. Version 1.0.0
+it from its directory with `choco install pc110-atlas --source . --version 1.0.3`.
+The package downloads the public MSI and verifies its checksum. Community version 1.0.0
 was [approved by Chocolatey on September 23, 2026](https://community.chocolatey.org/packages/pc110-atlas/1.0.0).
 Install directly from the Community Repository:
 

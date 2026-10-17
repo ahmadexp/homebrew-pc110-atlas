@@ -8,12 +8,19 @@ kit. [Snap Store](https://snapcraft.io/pc110-atlas), APT and YUM/DNF are live.
 Chocolatey Community version 1.0.0 was approved on September 23, 2026 after the
 requested copyright metadata correction. Its public status was checked on
 October 16, 2026.
-Mac/Homebrew 1.0.3 replaces only the standalone Intel and Apple silicon DMGs,
+Mac/Homebrew 1.0.3 replaces the standalone Intel and Apple silicon DMGs,
 adding direct pointing and the corrected Up key.
 See [release notes](RELEASE-MACOS-1.0.3.md) and [installer validation](QA-MACOS-1.0.3.md).
 
+Windows 1.0.3 MSI/EXE and a locally tested Chocolatey package were also built
+without hosted runners and published on October 17. See
+[Windows release notes](RELEASE-WINDOWS-1.0.3.md) and
+[native installer/package validation](QA-WINDOWS-1.0.3.md).
+The Community Repository remains at approved version 1.0.0 until the new
+package is submitted and reviewed.
+
 Published 1.0.0 desktop installers use the portable PC110 core. Mac 1.0.2 bundles
-the native emulator, retained in 1.0.3; Linux and Windows channels update separately. The Homebrew
+the native emulator, retained in Mac and Windows 1.0.3; Linux channels update separately. The Homebrew
 edition remains separate from the SwiftUI Mac Catalyst app. IRIX uses the smaller
 [C/X11 Unix edition](../unix/README.md).
 
@@ -279,6 +286,16 @@ checks SHA-256, and installs it silently. MSI registration enables Chocolatey's
 automatic uninstall. This follows the
 [Chocolatey MSI packaging guide](https://docs.chocolatey.org/en-us/guides/create/create-msi-package/).
 
+For the local-only 1.0.3 release, build and test the NUPKG on Windows, including
+installation from the public checksum-pinned MSI and automatic removal. Submit
+with `choco push pc110-atlas.1.0.3.nupkg --source https://push.chocolatey.org/`
+using the maintainer's publishing credential through a secure local prompt or
+existing Chocolatey configuration. Do not put the key in source files or logs.
+The website no longer supports direct NUPKG uploads. Submission enters a
+separate review process and does not guarantee immediate approval.
+
+The historical hosted publishing workflow remains documented below, but is
+not used for this release and must not be dispatched without authorization.
 Create a Chocolatey Community account and obtain its publishing API key. Run
 `bash desktop/packaging/configure-chocolatey.sh` in an interactive terminal to
 save the key directly to the public repository's `CHOCO_API_KEY` Actions secret.
